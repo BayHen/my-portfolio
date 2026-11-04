@@ -8,7 +8,7 @@
 | `/projects` | Danh sách, lọc theo công nghệ và danh mục bằng query string |
 | `/projects/[slug]` | Case study lấy từ dữ liệu cục bộ; slug không hợp lệ trả 404 |
 | `/about` | Giới thiệu, định hướng, nhóm kỹ năng, hành trình và triết lý |
-| `/contact` | Thông tin liên hệ và bản xem trước biểu mẫu chưa thể gửi |
+| `/contact` | Thông tin liên hệ và biểu mẫu gửi qua route máy chủ khi được cấu hình |
 
 `not-found.tsx` phục vụ đường dẫn không có nội dung; `error.tsx` cho lỗi khi render route. Cả hai có đường về trang chủ.
 
@@ -22,7 +22,7 @@ Bộ lọc dùng URL như `/projects?technology=Python&category=Creative+tool`. 
 
 ## Liên hệ
 
-Chưa có địa chỉ email công khai được cung cấp. Biểu mẫu chỉ mô tả giao diện: toàn bộ trường bị vô hiệu hóa và có thông báo chưa thể gửi. Giai đoạn 4 cần chốt kênh liên hệ, hợp đồng gửi, xác thực đầu vào, chống spam, thông báo thành công/lỗi và kiểm thử đầu cuối trước khi bật biểu mẫu.
+Chưa có địa chỉ email công khai được cung cấp. Giai đoạn 4 đã thêm route gửi qua Resend, xác thực đầu vào, chống lạm dụng cơ bản và thông báo trạng thái. Biểu mẫu chỉ bật khi có cấu hình gửi thật; xem `docs/phase4.md`.
 
 ## Kiểm tra trước công bố
 

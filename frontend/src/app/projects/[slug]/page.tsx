@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/primitives";
 import { TechnologyBadge } from "@/components/projects/portfolio-parts";
 import { getProjectBySlug, projects } from "@/content/projects";
+import { Reveal } from "@/components/shared/reveal";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -34,20 +35,22 @@ function DetailSection({
 }) {
   if (!value || (Array.isArray(value) && !value.length)) return null;
   return (
-    <section className="grid gap-4 py-8 sm:grid-cols-[12rem_1fr]">
-      <h2 className="text-accent font-mono text-xs font-semibold tracking-[.12em] uppercase">
-        {title}
-      </h2>
-      {Array.isArray(value) ? (
-        <ul className="text-ink list-inside list-disc space-y-2 leading-8">
-          {value.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-ink max-w-2xl leading-8">{value}</p>
-      )}
-    </section>
+    <Reveal>
+      <section className="grid gap-4 py-8 sm:grid-cols-[12rem_1fr]">
+        <h2 className="text-accent font-mono text-xs font-semibold tracking-[.12em] uppercase">
+          {title}
+        </h2>
+        {Array.isArray(value) ? (
+          <ul className="text-ink list-inside list-disc space-y-2 leading-8">
+            {value.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-ink max-w-2xl leading-8">{value}</p>
+        )}
+      </section>
+    </Reveal>
   );
 }
 
@@ -100,6 +103,7 @@ export default async function ProjectDetailPage({
             <DetailSection title="Tổng quan" value={project.description} />
             <Divider />
             <DetailSection title="Vấn đề" value={project.problem} />
+            <DetailSection title="Mục tiêu" value={project.goals} />
             <DetailSection title="Giải pháp" value={project.solution} />
             <DetailSection title="Vai trò" value={project.responsibilities} />
             <DetailSection title="Kiến trúc" value={project.architecture} />
@@ -107,6 +111,7 @@ export default async function ProjectDetailPage({
             <DetailSection title="Thách thức" value={project.challenges} />
             <DetailSection title="Kiểm thử" value={project.testing} />
             <DetailSection title="Kết quả" value={project.results} />
+            <DetailSection title="Bài học" value={project.lessonsLearned} />
             <section className="grid gap-4 py-8 sm:grid-cols-[12rem_1fr]">
               <h2 className="text-accent font-mono text-xs font-semibold tracking-[.12em] uppercase">
                 Công nghệ

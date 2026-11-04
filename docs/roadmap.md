@@ -1,21 +1,25 @@
-# Lộ trình
+# Lộ trình DEVFOLIO
 
 ## Giai đoạn 1 — Nền tảng
 
-Tài liệu, Next.js App Router, tooling, kiểu dữ liệu và dữ liệu mẫu được gắn nhãn. Cổng hoàn thành: chạy cục bộ, lint, typecheck và build thành công.
+Next.js App Router, TypeScript strict, tooling, dữ liệu có kiểu và tài liệu ban đầu.
 
-## Giai đoạn 2 — Portfolio công khai
+## Giai đoạn 2 — Hệ thống thiết kế
 
-Hệ thống thiết kế, theme, thành phần dùng lại và năm tuyến công khai đã được thiết lập bằng dữ liệu mẫu. Bước tiếp theo: thu thập nội dung thật và tài sản hình ảnh, hoàn thiện SEO và kiểm tra khả năng truy cập trên trình duyệt. Chỉ xuất bản thông tin đã được xác nhận.
+Token, theme sáng/tối/hệ thống, điều hướng, footer và thành phần dùng lại.
 
-## Giai đoạn 3 — Liên hệ thực
+## Giai đoạn 3 — Trang công khai
 
-Chọn phương thức liên hệ và chống spam, cấu hình dịch vụ gửi thư hoặc API thật, xác thực đầu vào và kiểm thử luồng đầu cuối.
+Trang chủ, danh sách và chi tiết dự án, about, contact, trạng thái lỗi và dữ liệu mẫu được gắn nhãn.
 
-## Giai đoạn 4 — Full-stack
+## Giai đoạn 4 — Chuyển động, nội dung và liên hệ
 
-Thiết kế hợp đồng API, FastAPI, PostgreSQL, SQLAlchemy, Alembic, Pydantic và triển khai an toàn. Chỉ thêm khi có nhu cầu lưu trữ và quản lý nội dung.
+Motion tiết chế, cấu trúc case study mở rộng, vị trí cấu hình hồ sơ, CV tùy chọn và route gửi Resend. Việc gửi thật chờ cấu hình của chủ sở hữu; nội dung thật và kiểm tra trực quan vẫn chưa hoàn thành.
 
-## Giai đoạn 5 — Admin riêng
+## Giai đoạn 5 — Hoàn thiện trước khi công bố
 
-Xác thực, phân quyền, quản lý nội dung và nhật ký thao tác. Kiểm tra bảo mật trước khi cho phép truy cập công khai.
+Thay dữ liệu mẫu bằng thông tin xác thực, kiểm tra trên nhiều trình duyệt/kích thước, đánh giá khả năng truy cập và hiệu năng, hoàn thiện SEO, xác minh domain email, thử gửi và nhận thật, kiểm tra bảo vệ chống lạm dụng trên hạ tầng triển khai.
+
+## Giai đoạn 6 — Backend tùy nhu cầu
+
+Thiết kế hợp đồng API và triển khai FastAPI, PostgreSQL, SQLAlchemy, Alembic, Pydantic khi cần quản lý dữ liệu. Di chuyển route liên hệ và cơ chế chống lạm dụng sang backend. Admin riêng chỉ triển khai sau khi xác định nhu cầu, xác thực và phân quyền.

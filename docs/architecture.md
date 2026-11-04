@@ -25,6 +25,8 @@ Giai đoạn 2 sử dụng `src/components/ui` cho primitive, `layout` cho đi�
 
 Giai đoạn 3 thêm các tuyến công khai App Router. Danh sách dự án đọc `searchParams` trên server để lọc bằng URL; chi tiết dùng `generateStaticParams` và `notFound()` cho slug không hợp lệ. Nội dung case study là trường tùy chọn của `Project`, chỉ hiển thị khi có dữ liệu. Xem `docs/public-pages.md`.
 
+Giai đoạn 4 thêm `POST /api/contact` chạy trong Node.js runtime; dịch vụ email và khóa chỉ nằm phía máy chủ. `src/lib/contact.ts` chứa xác thực và lớp gửi để có thể kiểm thử độc lập. Hiệu ứng Motion nằm trong Client Component `Reveal`; các trang nội dung vẫn ưu tiên Server Components. Xem `docs/phase4.md`.
+
 ## Hướng mở rộng
 
 Khi nội dung được xác nhận, route dự án có thể dùng dữ liệu cục bộ trước. Sau khi có nhu cầu quản trị, backend FastAPI sẽ sở hữu dữ liệu và hợp đồng API; frontend gọi API thông qua lớp truy cập dữ liệu riêng. Biến môi trường máy chủ không được đưa vào `NEXT_PUBLIC_*`.

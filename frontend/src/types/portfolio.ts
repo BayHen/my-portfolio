@@ -2,8 +2,14 @@
 export interface Profile {
   name: string;
   headline: string;
+  introduction?: string;
   bio: string;
   location?: string;
+  interests?: string[];
+  skills?: string[];
+  education?: { school: string; program: string; period?: string }[];
+  resumeUrl?: string;
+  publicEmail?: string;
   placeholder: boolean;
 }
 
@@ -24,6 +30,7 @@ export interface Project {
   featured?: boolean;
   thumbnail?: { src: string; alt: string };
   problem?: string;
+  goals?: string[];
   solution?: string;
   responsibilities?: string[];
   architecture?: string;
@@ -32,6 +39,7 @@ export interface Project {
   screenshots?: { src: string; alt: string }[];
   testing?: string;
   results?: string;
+  lessonsLearned?: string;
   repositoryUrl?: string;
   liveUrl?: string;
   placeholder: boolean;

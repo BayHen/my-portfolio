@@ -10,7 +10,7 @@ import type {
 
 type Variant = "primary" | "secondary" | "quiet";
 const buttonBase =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-sm)] px-5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-sm)] px-5 text-sm font-semibold transition-[background-color,transform,opacity] duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50";
 const variants: Record<Variant, string> = {
   primary: "bg-accent text-[var(--accent-contrast)] hover:opacity-85",
   secondary: "border border-line bg-surface text-ink hover:bg-subtle",

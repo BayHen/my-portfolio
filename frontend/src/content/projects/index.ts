@@ -24,6 +24,8 @@ export const projects: Project[] = [
     featured: true,
     technologies: [technologies[0], technologies[1], technologies[4]],
     placeholder: true,
+    // TODO: Add verified problem, goals, architecture, features, responsibilities,
+    // challenges, solution, testing, results, and lessons learned.
   },
   {
     slug: "voicemorph-studio",
@@ -35,6 +37,7 @@ export const projects: Project[] = [
     status: "Ý tưởng mẫu",
     technologies: [technologies[0], technologies[2], technologies[3]],
     placeholder: true,
+    // TODO: Replace concept copy with verified case-study details.
   },
 ];
 

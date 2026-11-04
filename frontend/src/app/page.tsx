@@ -12,6 +12,7 @@ import {
   SectionHeading,
 } from "@/components/ui/primitives";
 import { profile } from "@/content/profile";
+import { Reveal } from "@/components/shared/reveal";
 import { projects, technologies } from "@/content/projects";
 
 const groups = ["Backend", "Frontend", "Database", "DevOps", "Tools"] as const;
@@ -26,26 +27,34 @@ export default function HomePage() {
             className="border-line absolute top-10 right-2 hidden size-24 rounded-full border lg:block"
           />
           <div className="relative max-w-4xl">
-            <p className="text-accent mb-7 font-mono text-xs font-semibold tracking-[.18em] uppercase">
-              {profile.placeholder
-                ? "Giới thiệu mẫu / Đang cập nhật"
-                : profile.name}
-            </p>
-            <h1 className="text-[clamp(3rem,8vw,7.2rem)] leading-[1.02] font-semibold tracking-[-.075em]">
-              Xây dựng sản phẩm từ{" "}
-              <span className="text-accent">nền tảng vững.</span>
-            </h1>
-            <p className="text-muted mt-8 max-w-2xl text-base leading-8 sm:text-lg">
-              {profile.headline}. {profile.bio}
-            </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <ActionLink href="/projects">
-                Xem dự án <ArrowDownRight size={18} aria-hidden="true" />
-              </ActionLink>
-              <ActionLink href="/contact" variant="secondary">
-                Liên hệ <ArrowUpRight size={18} aria-hidden="true" />
-              </ActionLink>
-            </div>
+            <Reveal hero>
+              <p className="text-accent mb-7 font-mono text-xs font-semibold tracking-[.18em] uppercase">
+                {profile.placeholder
+                  ? "Giới thiệu mẫu / Đang cập nhật"
+                  : profile.name}
+              </p>
+            </Reveal>
+            <Reveal hero delay={0.08}>
+              <h1 className="text-[clamp(3rem,8vw,7.2rem)] leading-[1.02] font-semibold tracking-[-.075em]">
+                Xây dựng sản phẩm từ{" "}
+                <span className="text-accent">nền tảng vững.</span>
+              </h1>
+            </Reveal>
+            <Reveal hero delay={0.16}>
+              <p className="text-muted mt-8 max-w-2xl text-base leading-8 sm:text-lg">
+                {profile.headline}. {profile.bio}
+              </p>
+            </Reveal>
+            <Reveal hero delay={0.24}>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <ActionLink href="/projects">
+                  Xem dự án <ArrowDownRight size={18} aria-hidden="true" />
+                </ActionLink>
+                <ActionLink href="/contact" variant="secondary">
+                  Liên hệ <ArrowUpRight size={18} aria-hidden="true" />
+                </ActionLink>
+              </div>
+            </Reveal>
           </div>
         </section>
         <SectionWrapper>

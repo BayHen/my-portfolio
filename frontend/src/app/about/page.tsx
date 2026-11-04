@@ -13,6 +13,9 @@ import {
 import { EmptyState } from "@/components/shared/states";
 import { experiences, profile } from "@/content/profile";
 import { technologies } from "@/content/projects";
+import { getResumeHref } from "@/lib/resume";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 
 export const metadata: Metadata = {
   title: "About | DEVFOLIO",
@@ -21,6 +24,14 @@ export const metadata: Metadata = {
 const groups = ["Backend", "Frontend", "Database", "DevOps", "Tools"] as const;
 
 export default function AboutPage() {
+  const candidate = getResumeHref(profile.resumeUrl);
+  const resumeHref =
+    candidate &&
+    (candidate.startsWith("/")
+      ? existsSync(join(process.cwd(), "public", candidate.slice(1)))
+      : true)
+      ? candidate
+      : null;
   return (
     <main id="main-content">
       <Container>
@@ -42,11 +53,17 @@ export default function AboutPage() {
               eyebrow="01 / Direction"
               title="Mối quan tâm chuyên môn"
             />
-            <p className="text-muted max-w-2xl leading-8">
-              Định hướng đã khai báo của portfolio là Python Backend /
-              Full-stack. Các lĩnh vực quan tâm cụ thể sẽ được cập nhật sau khi
-              chủ sở hữu cung cấp nội dung.
-            </p>
+            <div className="text-muted max-w-2xl leading-8">
+              {profile.interests?.length ? (
+                <ul className="list-inside list-disc">
+                  {profile.interests.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>TODO: Bổ sung mối quan tâm chuyên môn đã xác nhận.</p>
+              )}
+            </div>
           </div>
         </SectionWrapper>
         <Divider />
@@ -73,6 +90,11 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+          {profile.skills?.length ? (
+            <p className="text-muted mt-6">
+              Kỹ năng đã xác nhận: {profile.skills.join(", ")}
+            </p>
+          ) : null}
         </SectionWrapper>
         <Divider />
         <SectionWrapper>
@@ -94,6 +116,22 @@ export default function AboutPage() {
               />
             </div>
           )}
+          {profile.education?.length ? (
+            <div className="mt-8 space-y-4">
+              {profile.education.map((item) => (
+                <div
+                  key={`${item.school}-${item.program}`}
+                  className="border-line border-l-2 pl-5"
+                >
+                  <h3 className="font-semibold">{item.program}</h3>
+                  <p className="text-muted">
+                    {item.school}
+                    {item.period ? ` · ${item.period}` : ""}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </SectionWrapper>
         <Divider />
         <SectionWrapper>
@@ -103,10 +141,20 @@ export default function AboutPage() {
             description="Chưa có phát biểu cá nhân được xác nhận. Phần này sẽ trình bày cách giải quyết vấn đề và nguyên tắc kỹ thuật khi có nội dung thật."
           />
           <div className="mt-8 max-w-xl">
-            <EmptyState
-              title="CV chưa được cung cấp"
-              description="Liên kết tải CV sẽ chỉ xuất hiện sau khi có tài liệu hợp lệ."
-            />
+            {resumeHref ? (
+              <a
+                href={resumeHref}
+                download={resumeHref.startsWith("/") ? true : undefined}
+                className="bg-accent inline-flex min-h-11 items-center rounded-[var(--radius-sm)] px-5 text-sm font-semibold text-[var(--accent-contrast)] hover:opacity-85"
+              >
+                Download CV
+              </a>
+            ) : (
+              <EmptyState
+                title="CV chưa được cung cấp"
+                description="TODO: Thêm PDF thật vào public và cấu hình resumeUrl để bật tải CV."
+              />
+            )}
           </div>
         </SectionWrapper>
       </Container>

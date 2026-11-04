@@ -17,6 +17,11 @@ export default function RootLayout({
   return (
     <html lang="vi" suppressHydrationWarning>
       <body>
+        <noscript>
+          <style>
+            {".reveal{opacity:1!important;transform:none!important}"}
+          </style>
+        </noscript>
         <ThemeProvider>
           <a href="#main-content" className="skip-link">
             Bỏ qua điều hướng

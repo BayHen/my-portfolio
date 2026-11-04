@@ -64,6 +64,9 @@ body {
   background: var(--canvas);
   color: var(--text);
   font-family: var(--font-sans);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 button,
 input,
