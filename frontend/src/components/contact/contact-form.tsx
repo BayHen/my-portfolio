@@ -6,7 +6,7 @@ import {
   contactLimits,
   validateContact,
   type ContactErrors,
-} from "@/lib/contact";
+} from "@/lib/contact-validation";
 
 export function ContactForm({ configured }: { configured: boolean }) {
   const [fields, setFields] = useState({

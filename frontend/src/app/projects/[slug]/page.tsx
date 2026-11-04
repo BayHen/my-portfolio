@@ -11,6 +11,12 @@ import {
 import { TechnologyBadge } from "@/components/projects/portfolio-parts";
 import { getProjectBySlug, projects } from "@/content/projects";
 import { Reveal } from "@/components/shared/reveal";
+import {
+  pageMetadata,
+  getSiteUrl,
+  isIndexable,
+  serializeJsonLd,
+} from "@/lib/seo";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -22,8 +28,18 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const project = getProjectBySlug((await params).slug);
   return project
-    ? { title: `${project.title} | DEVFOLIO`, description: project.summary }
-    : { title: "Không tìm thấy dự án | DEVFOLIO" };
+    ? pageMetadata(
+        `${project.title} | DEVFOLIO`,
+        project.summary,
+        `/projects/${project.slug}`,
+        !project.placeholder,
+      )
+    : pageMetadata(
+        "Không tìm thấy dự án | DEVFOLIO",
+        "Dự án không tồn tại.",
+        "/projects",
+        false,
+      );
 }
 
 function DetailSection({
@@ -61,8 +77,25 @@ export default async function ProjectDetailPage({
 }) {
   const project = getProjectBySlug((await params).slug);
   if (!project) notFound();
+  const siteUrl = getSiteUrl();
+  const jsonLd =
+    siteUrl && isIndexable() && !project.placeholder
+      ? {
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          name: project.title,
+          description: project.summary,
+          url: new URL(`/projects/${project.slug}`, siteUrl).toString(),
+        }
+      : null;
   return (
     <main id="main-content">
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+        />
+      )}
       <Container>
         <article className="py-14 sm:py-20">
           <Link

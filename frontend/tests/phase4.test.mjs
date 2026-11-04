@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { projects, getProjectBySlug } from "../src/content/projects/index.ts";
 import { getResumeHref } from "../src/lib/resume.ts";
+import { validateContact } from "../src/lib/contact-validation.ts";
 import {
-  validateContact,
   getContactConfig,
   sendContactEmail,
   allowContactAttempt,

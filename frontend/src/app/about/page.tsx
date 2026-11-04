@@ -16,11 +16,13 @@ import { technologies } from "@/content/projects";
 import { getResumeHref } from "@/lib/resume";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About | DEVFOLIO",
-  description: "Thông tin giới thiệu và định hướng chuyên môn của DEVFOLIO.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Giới thiệu | DEVFOLIO",
+  "Tìm hiểu định hướng chuyên môn, nền tảng kỹ thuật và hành trình phát triển của DEVFOLIO.",
+  "/about",
+);
 const groups = ["Backend", "Frontend", "Database", "DevOps", "Tools"] as const;
 
 export default function AboutPage() {

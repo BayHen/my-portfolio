@@ -7,12 +7,14 @@ import {
 import { ContactForm } from "@/components/contact/contact-form";
 import { socialLinks, profile } from "@/content/profile";
 import { getContactConfig } from "@/lib/contact";
+import { pageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = {
-  title: "Contact | DEVFOLIO",
-  description: "Thông tin liên hệ DEVFOLIO.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Liên hệ | DEVFOLIO",
+  "Liên hệ với chủ sở hữu DEVFOLIO qua các kênh công khai hoặc biểu mẫu khi dịch vụ email được cấu hình.",
+  "/contact",
+);
 const publicLinks = socialLinks.filter((link) => !link.placeholder);
 
 export default function ContactPage() {

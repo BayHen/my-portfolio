@@ -3,8 +3,8 @@ import {
   allowContactAttempt,
   getContactConfig,
   sendContactEmail,
-  validateContact,
 } from "@/lib/contact";
+import { validateContact } from "@/lib/contact-validation";
 
 export const runtime = "nodejs";
 

@@ -7,11 +7,14 @@ import {
 import { Container, SectionHeading } from "@/components/ui/primitives";
 import { EmptyState } from "@/components/shared/states";
 import { projects } from "@/content/projects";
+import { pageMetadata } from "@/lib/seo";
+import { filterProjects } from "@/lib/project-filters";
 
-export const metadata: Metadata = {
-  title: "Projects | DEVFOLIO",
-  description: "Danh sách dự án và ý tưởng mẫu của DEVFOLIO.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Dự án | DEVFOLIO",
+  "Khám phá danh sách dự án, công nghệ và các case study của DEVFOLIO.",
+  "/projects",
+);
 
 export default async function ProjectsPage({
   searchParams,
@@ -35,12 +38,7 @@ export default async function ProjectsPage({
         .filter((item): item is string => Boolean(item)),
     ),
   ].sort();
-  const filtered = projects.filter(
-    (project) =>
-      (technology === "all" ||
-        project.technologies.some((item) => item.name === technology)) &&
-      (category === "all" || project.category === category),
-  );
+  const filtered = filterProjects(projects, technology, category);
   const filterHref = (kind: "technology" | "category", value: string) => {
     const next = new URLSearchParams();
     const tech = kind === "technology" ? value : technology;
