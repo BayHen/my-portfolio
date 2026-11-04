@@ -10,6 +10,7 @@ export interface Profile {
 export interface Technology {
   name: string;
   category: "language" | "framework" | "database" | "tool";
+  group?: "Backend" | "Frontend" | "Database" | "DevOps" | "Tools";
 }
 
 export interface Project {
@@ -18,6 +19,19 @@ export interface Project {
   summary: string;
   description: string;
   technologies: Technology[];
+  category?: string;
+  status?: string;
+  featured?: boolean;
+  thumbnail?: { src: string; alt: string };
+  problem?: string;
+  solution?: string;
+  responsibilities?: string[];
+  architecture?: string;
+  features?: string[];
+  challenges?: string;
+  screenshots?: { src: string; alt: string }[];
+  testing?: string;
+  results?: string;
   repositoryUrl?: string;
   liveUrl?: string;
   placeholder: boolean;

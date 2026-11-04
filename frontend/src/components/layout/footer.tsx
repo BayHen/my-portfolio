@@ -4,6 +4,7 @@ import { socialLinks } from "@/content/profile";
 import { Container, Divider, ExternalLink } from "@/components/ui/primitives";
 
 export function Footer() {
+  const publicLinks = socialLinks.filter((link) => !link.placeholder);
   return (
     <footer className="border-line bg-surface mt-24 border-t">
       <Container className="py-12 sm:py-16">
@@ -39,15 +40,13 @@ export function Footer() {
             <p className="text-muted mb-4 text-xs font-semibold tracking-[.14em] uppercase">
               Kết nối
             </p>
-            {socialLinks.length ? (
+            {publicLinks.length ? (
               <ul className="space-y-3">
-                {socialLinks
-                  .filter((link) => !link.placeholder)
-                  .map((link) => (
-                    <li key={link.url}>
-                      <ExternalLink href={link.url}>{link.label}</ExternalLink>
-                    </li>
-                  ))}
+                {publicLinks.map((link) => (
+                  <li key={link.url}>
+                    <ExternalLink href={link.url}>{link.label}</ExternalLink>
+                  </li>
+                ))}
               </ul>
             ) : (
               <p className="text-muted max-w-48 text-sm leading-6">

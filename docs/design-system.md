@@ -2,7 +2,7 @@
 
 ## Định hướng
 
-Portfolio cho người đọc thiên về kỹ thuật: bố cục biên tập, chữ rõ, nhiều khoảng thở, điểm nhấn xanh vừa đủ. Trang `/` hiện là bản xem trước thành phần, chưa phải portfolio hoàn chỉnh.
+Portfolio cho người đọc thiên về kỹ thuật: bố cục biên tập, chữ rõ, nhiều khoảng thở, điểm nhấn xanh vừa đủ. Từ Giai đoạn 3, trang `/` là trang chủ công khai dùng nội dung mẫu được gắn nhãn.
 
 ## Token
 
@@ -38,4 +38,4 @@ Thành phần dự án nhận dữ liệu có kiểu từ `src/types/portfolio.t
 
 ## Giới hạn hiện tại
 
-Các mục điều hướng trỏ tới section của bản xem trước trên `/`; route portfolio riêng và liên hệ thực sẽ triển khai sau. Kiểm tra trình duyệt trên nhiều kích thước và kiểm thử tương tác vẫn cần thực hiện trước khi công bố.
+Các mục điều hướng trỏ tới route công khai. Chức năng gửi liên hệ vẫn chờ Giai đoạn 4. Kiểm tra trình duyệt trên nhiều kích thước và kiểm thử tương tác vẫn cần thực hiện trước khi công bố.

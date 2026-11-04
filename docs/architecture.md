@@ -23,6 +23,8 @@ Giai đoạn 2 sử dụng `src/components/ui` cho primitive, `layout` cho đi�
 
 Ứng dụng hiện đọc dữ liệu từ module TypeScript cục bộ. Dữ liệu mẫu có cờ `placeholder`; giao diện không trình bày thành tựu hoặc lịch sử làm việc hư cấu như sự thật. Chưa có route API, backend, cơ sở dữ liệu hay admin.
 
+Giai đoạn 3 thêm các tuyến công khai App Router. Danh sách dự án đọc `searchParams` trên server để lọc bằng URL; chi tiết dùng `generateStaticParams` và `notFound()` cho slug không hợp lệ. Nội dung case study là trường tùy chọn của `Project`, chỉ hiển thị khi có dữ liệu. Xem `docs/public-pages.md`.
+
 ## Hướng mở rộng
 
 Khi nội dung được xác nhận, route dự án có thể dùng dữ liệu cục bộ trước. Sau khi có nhu cầu quản trị, backend FastAPI sẽ sở hữu dữ liệu và hợp đồng API; frontend gọi API thông qua lớp truy cập dữ liệu riêng. Biến môi trường máy chủ không được đưa vào `NEXT_PUBLIC_*`.

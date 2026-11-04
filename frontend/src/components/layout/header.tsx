@@ -9,14 +9,7 @@ import { ThemeToggle } from "./theme-toggle";
 
 export function Header() {
   const pathname = usePathname();
-  const [hash, setHash] = useState("");
   const [open, setOpen] = useState(false);
-  useEffect(() => {
-    const update = () => setHash(window.location.hash.slice(1));
-    update();
-    window.addEventListener("hashchange", update);
-    return () => window.removeEventListener("hashchange", update);
-  }, []);
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -26,7 +19,9 @@ export function Header() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
   const active = (section: string) =>
-    pathname === "/" && (hash || "home") === section;
+    section === "home"
+      ? pathname === "/"
+      : pathname === `/${section}` || pathname.startsWith(`/${section}/`);
   return (
     <header className="border-line bg-canvas/95 sticky top-0 z-50 border-b backdrop-blur-md">
       <Container className="flex min-h-20 items-center justify-between gap-4">
@@ -78,7 +73,6 @@ export function Header() {
                 href={item.href}
                 aria-current={active(item.section) ? "page" : undefined}
                 onClick={() => {
-                  setHash(item.section === "home" ? "" : item.section);
                   setOpen(false);
                 }}
                 className={`hover:bg-subtle rounded-md px-3 py-3 text-base ${active(item.section) ? "text-accent" : "text-ink"}`}

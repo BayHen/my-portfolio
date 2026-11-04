@@ -6,7 +6,7 @@ Tài liệu, Next.js App Router, tooling, kiểu dữ liệu và dữ liệu m�
 
 ## Giai đoạn 2 — Portfolio công khai
 
-Hệ thống thiết kế, theme và các thành phần dùng lại đã được thiết lập. Bước tiếp theo: thu thập nội dung thật và tài sản hình ảnh; hoàn thiện trang chủ, danh sách dự án, case study, SEO và kiểm tra khả năng truy cập. Chỉ xuất bản thông tin đã được xác nhận.
+Hệ thống thiết kế, theme, thành phần dùng lại và năm tuyến công khai đã được thiết lập bằng dữ liệu mẫu. Bước tiếp theo: thu thập nội dung thật và tài sản hình ảnh, hoàn thiện SEO và kiểm tra khả năng truy cập trên trình duyệt. Chỉ xuất bản thông tin đã được xác nhận.
 
 ## Giai đoạn 3 — Liên hệ thực
 

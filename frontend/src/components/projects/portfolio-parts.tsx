@@ -5,6 +5,8 @@ import type {
   Technology,
 } from "@/types/portfolio";
 import { Badge, Card, ExternalLink } from "@/components/ui/primitives";
+import Link from "next/link";
+import Image from "next/image";
 import type { HTMLAttributes, ReactNode } from "react";
 
 export function SectionWrapper({
@@ -24,11 +26,30 @@ export function TechnologyBadge({ technology }: { technology: Technology }) {
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <Card>
+      <div className="bg-subtle border-line relative mb-6 flex aspect-[16/9] items-end overflow-hidden rounded-[var(--radius-sm)] border p-5">
+        {project.thumbnail ? (
+          <Image
+            src={project.thumbnail.src}
+            alt={project.thumbnail.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
+          />
+        ) : (
+          <span className="text-muted font-mono text-xs tracking-[.12em] uppercase">
+            Hình ảnh đang cập nhật
+          </span>
+        )}
+      </div>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <h3 className="text-xl font-semibold tracking-tight">
           {project.title}
         </h3>
         {project.placeholder && <Badge>Dữ liệu mẫu</Badge>}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {project.featured && <Badge>Nổi bật</Badge>}
+        {project.status && <Badge>{project.status}</Badge>}
       </div>
       <p className="text-muted mt-3 leading-7">{project.summary}</p>
       <div className="mt-6 flex flex-wrap gap-2">
@@ -36,6 +57,15 @@ export function ProjectCard({ project }: { project: Project }) {
           <TechnologyBadge key={technology.name} technology={technology} />
         ))}
       </div>
+      <Link
+        href={`/projects/${project.slug}`}
+        className="text-accent mt-6 inline-flex min-h-11 items-center font-semibold hover:underline"
+      >
+        Xem chi tiết{" "}
+        <span aria-hidden="true" className="ml-2">
+          ↗
+        </span>
+      </Link>
       {!project.placeholder && (project.repositoryUrl || project.liveUrl) && (
         <div className="mt-6 flex gap-5">
           {project.repositoryUrl && (
