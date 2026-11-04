@@ -26,4 +26,4 @@ Chạy trong `frontend/`: `npm run lint`, `npm run typecheck`, `npm run build`, 
 - `devfolio/`: vị trí dành cho mã Python ở giai đoạn sau; hiện chỉ có tài liệu giữ chỗ.
 - `.github/`: vị trí cho cấu hình cộng tác; chưa có workflow CI vì chưa xác định môi trường triển khai.
 
-Xem [yêu cầu](docs/requirements.md), [kiến trúc](docs/architecture.md), [lộ trình](docs/roadmap.md) và [quy trình Git](docs/git-workflow.md).
+Giai đoạn 2 bổ sung hệ thống thiết kế sáng/tối, header, footer, các thành phần dùng lại và bản xem trước trên `/`. Xem [yêu cầu](docs/requirements.md), [kiến trúc](docs/architecture.md), [hệ thống thiết kế](docs/design-system.md), [lộ trình](docs/roadmap.md) và [quy trình Git](docs/git-workflow.md).

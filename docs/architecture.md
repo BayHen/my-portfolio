@@ -19,6 +19,8 @@
 - `src/styles`: CSS toàn cục.
 - `src/hooks`, `src/lib`: chỉ được tạo khi có logic dùng chung thực sự.
 
+Giai đoạn 2 sử dụng `src/components/ui` cho primitive, `layout` cho điều hướng và theme, `projects` cho thành phần nhận dữ liệu portfolio, `shared` cho trạng thái giao diện. Cấu hình điều hướng ở `src/config/navigation.ts`. Token và bảng màu ở `src/styles/globals.css`; xem `docs/design-system.md`.
+
 Ứng dụng hiện đọc dữ liệu từ module TypeScript cục bộ. Dữ liệu mẫu có cờ `placeholder`; giao diện không trình bày thành tựu hoặc lịch sử làm việc hư cấu như sự thật. Chưa có route API, backend, cơ sở dữ liệu hay admin.
 
 ## Hướng mở rộng
