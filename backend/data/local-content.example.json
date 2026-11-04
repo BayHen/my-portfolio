@@ -1,0 +1,41 @@
+{
+  "technologies": [
+    { "name": "Python", "category": "language", "group": "Backend" },
+    { "name": "FastAPI", "category": "framework", "group": "Backend" },
+    { "name": "TypeScript", "category": "language", "group": "Frontend" },
+    { "name": "Next.js", "category": "framework", "group": "Frontend" },
+    { "name": "PostgreSQL", "category": "database", "group": "Database" },
+    { "name": "Docker", "category": "tool", "group": "DevOps" },
+    { "name": "Git", "category": "tool", "group": "Tools" }
+  ],
+  "projects": [
+    {
+      "slug": "coffee-shop-management-system",
+      "title": "Coffee Shop Management System",
+      "summary": "Ý tưởng mẫu cho hệ thống quản lý cửa hàng cà phê.",
+      "description": "Bản ghi phát triển dùng để thử bố cục case study.",
+      "category": "Business application",
+      "status": "Ý tưởng mẫu",
+      "featured": true,
+      "placeholder": true,
+      "technologies": ["Python", "FastAPI", "PostgreSQL"]
+    },
+    {
+      "slug": "voicemorph-studio",
+      "title": "VoiceMorph Studio",
+      "summary": "Ý tưởng mẫu cho một công cụ xử lý giọng nói.",
+      "description": "Bản ghi phát triển dùng để thử tuyến dự án và bộ lọc.",
+      "category": "Creative tool",
+      "status": "Ý tưởng mẫu",
+      "placeholder": true,
+      "technologies": ["Python", "TypeScript", "Next.js"]
+    }
+  ],
+  "profile": {
+    "name": "TODO: Tên của bạn",
+    "headline": "Python Backend / Full-stack Developer",
+    "bio": "TODO: Cập nhật tiểu sử bằng thông tin thật.",
+    "placeholder": true
+  },
+  "experiences": []
+}

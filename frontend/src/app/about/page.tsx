@@ -10,9 +10,12 @@ import {
   SectionWrapper,
   TechnologyBadge,
 } from "@/components/projects/portfolio-parts";
-import { EmptyState } from "@/components/shared/states";
-import { experiences, profile } from "@/content/profile";
-import { technologies } from "@/content/projects";
+import { EmptyState, ErrorState } from "@/components/shared/states";
+import {
+  loadExperiences,
+  loadProfile,
+  loadTechnologies,
+} from "@/lib/portfolio-api";
 import { getResumeHref } from "@/lib/resume";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
@@ -25,7 +28,32 @@ export const metadata: Metadata = pageMetadata(
 );
 const groups = ["Backend", "Frontend", "Database", "DevOps", "Tools"] as const;
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  let data;
+  try {
+    data = await Promise.all([
+      loadProfile(),
+      loadExperiences(),
+      loadTechnologies(),
+    ]);
+  } catch {
+    return (
+      <main id="main-content">
+        <Container className="py-20">
+          <ErrorState description="Không thể tải hồ sơ." />
+        </Container>
+      </main>
+    );
+  }
+  const [profile, experiences, technologies] = data;
+  if (!profile)
+    return (
+      <main id="main-content">
+        <Container className="py-20">
+          <EmptyState title="Hồ sơ chưa được công bố" />
+        </Container>
+      </main>
+    );
   const candidate = getResumeHref(profile.resumeUrl);
   const resumeHref =
     candidate &&

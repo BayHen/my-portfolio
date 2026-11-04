@@ -13,3 +13,5 @@
 ## Còn cần trước v1.0
 
 Nội dung cá nhân và dự án được xác nhận, ảnh/CV thật, domain, khóa email và kiểm thử gửi thật; kiểm tra thủ công WCAG, đo Lighthouse trên production và xác nhận deployment. Xem `docs/release-checklist.md`.
+
+Kiểm tra local ngày 04/11/2026: 6 bài test core, 8 bài test thành phần, 12 ca E2E desktop/mobile qua. Lighthouse local: Performance 89, Accessibility 100, Best Practices 96, SEO 63. Điểm SEO thấp vì `noindex` có chủ đích; chưa có điểm production.

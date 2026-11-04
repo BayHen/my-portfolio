@@ -1,5 +1,7 @@
 # DEVFOLIO
 
+Giai đoạn 6 bổ sung FastAPI và PostgreSQL trong `backend/`. Xem [hướng dẫn backend](docs/backend.md) để cấu hình cơ sở dữ liệu, chạy migration, nhập nội dung đã xác minh và kết nối frontend. Khi chưa cấu hình `BACKEND_API_URL`, frontend tiếp tục dùng dữ liệu mẫu cục bộ.
+
 Nền tảng portfolio cá nhân cho lập trình viên Python Backend / Full-stack. Giai đoạn 1 thiết lập ứng dụng Next.js, dữ liệu nội dung cục bộ có kiểu rõ ràng và quy trình phát triển. Các thông tin cá nhân trong mã nguồn hiện là dữ liệu mẫu, không đại diện cho người thật.
 
 ## Chạy tại máy

@@ -31,7 +31,10 @@ test("filters and invalid slug", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Về trang chủ" })).toBeVisible();
 });
 
-test("theme persists and the resume action stays absent", async ({ page, isMobile }) => {
+test("theme persists and the resume action stays absent", async ({
+  page,
+  isMobile,
+}) => {
   await page.goto("/");
   if (isMobile) await page.getByRole("button", { name: "Mở menu" }).click();
   await page.getByRole("button", { name: "Chế độ tối" }).first().click();
@@ -69,7 +72,9 @@ test("contact validation, provider acceptance and failure", async ({
   await page.getByLabel("Email *").fill("ada@example.com");
   await page.getByLabel("Lời nhắn *").fill("Provider failure test");
   await send.click();
-  await expect(page.getByRole("alert").filter({ hasText: "Provider error" })).toBeVisible();
+  await expect(
+    page.getByRole("alert").filter({ hasText: "Provider error" }),
+  ).toBeVisible();
 });
 
 test("mobile navigation, layout width and reduced motion", async ({

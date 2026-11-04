@@ -5,8 +5,8 @@ import {
   SectionWrapper,
 } from "@/components/projects/portfolio-parts";
 import { Container, SectionHeading } from "@/components/ui/primitives";
-import { EmptyState } from "@/components/shared/states";
-import { projects } from "@/content/projects";
+import { EmptyState, ErrorState } from "@/components/shared/states";
+import { loadProjects } from "@/lib/portfolio-api";
 import { pageMetadata } from "@/lib/seo";
 import { filterProjects } from "@/lib/project-filters";
 
@@ -22,6 +22,18 @@ export default async function ProjectsPage({
   searchParams: Promise<{ technology?: string; category?: string }>;
 }) {
   const params = await searchParams;
+  let projects;
+  try {
+    projects = await loadProjects();
+  } catch {
+    return (
+      <main id="main-content">
+        <Container className="py-20">
+          <ErrorState description="Không thể tải danh sách dự án." />
+        </Container>
+      </main>
+    );
+  }
   const technology = params.technology ?? "all";
   const category = params.category ?? "all";
   const technologyOptions = [

@@ -21,6 +21,7 @@ export function ContactForm({ configured }: { configured: boolean }) {
   >("idle");
   const [feedback, setFeedback] = useState("");
   const feedbackRef = useRef<HTMLParagraphElement>(null);
+  const requestKey = useRef<string | null>(null);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -36,22 +37,31 @@ export function ContactForm({ configured }: { configured: boolean }) {
     }
     setStatus("sending");
     setFeedback("");
+    requestKey.current ||= crypto.randomUUID();
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": requestKey.current,
+        },
         body: JSON.stringify(checked.value),
       });
       const result: {
         accepted?: boolean;
+        stored?: boolean;
+        notification?: string;
         error?: string;
         errors?: ContactErrors;
       } = await response.json();
       if (response.status === 202 && result.accepted) {
         setStatus("accepted");
         setFeedback(
-          "Dịch vụ email đã tiếp nhận lời nhắn. Chúng tôi chưa thể xác nhận thư đã được phát tới hộp thư.",
+          result.stored
+            ? "Lời nhắn đã được lưu. Thông báo email có thể đang chờ xử lý."
+            : "Dịch vụ email đã tiếp nhận lời nhắn. Chúng tôi chưa thể xác nhận thư đã được phát tới hộp thư.",
         );
+        requestKey.current = null;
         setFields({ name: "", email: "", message: "", website: "" });
         setErrors({});
         requestAnimationFrame(() => feedbackRef.current?.focus());

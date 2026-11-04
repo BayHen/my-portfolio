@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { profile } from "@/content/profile";
 import { projects } from "@/content/projects";
+import { getBackendUrl } from "@/lib/portfolio-api";
 
 export function getSiteUrl(env: NodeJS.ProcessEnv = process.env): URL | null {
   const raw = env.SITE_URL?.trim();
@@ -32,8 +33,11 @@ export function getSiteUrl(env: NodeJS.ProcessEnv = process.env): URL | null {
 export function isIndexable(env: NodeJS.ProcessEnv = process.env): boolean {
   return (
     !!getSiteUrl(env) &&
-    !profile.placeholder &&
-    projects.every((project) => !project.placeholder)
+    env.CONTENT_VERIFIED === "true" &&
+    (getBackendUrl(env)
+      ? true
+      : !profile.placeholder &&
+        projects.every((project) => !project.placeholder))
   );
 }
 

@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { navigation } from "@/config/navigation";
 import { socialLinks } from "@/content/profile";
+import type { SocialLink } from "@/types/portfolio";
 import { Container, Divider, ExternalLink } from "@/components/ui/primitives";
 
-export function Footer() {
-  const publicLinks = socialLinks.filter((link) => !link.placeholder);
+export function Footer({ links = socialLinks }: { links?: SocialLink[] }) {
+  const publicLinks = links.filter((link) => !link.placeholder);
   return (
     <footer className="border-line bg-surface mt-24 border-t">
       <Container className="py-12 sm:py-16">

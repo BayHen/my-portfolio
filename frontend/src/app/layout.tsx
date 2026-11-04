@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import "@/styles/globals.css";
 import { pageMetadata } from "@/lib/seo";
+import { loadSocialLinks } from "@/lib/portfolio-api";
 
 export const metadata: Metadata = pageMetadata(
   "DEVFOLIO | Python Backend / Full-stack",
@@ -12,9 +13,15 @@ export const metadata: Metadata = pageMetadata(
   "/",
 );
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
+  let links = [] as Awaited<ReturnType<typeof loadSocialLinks>>;
+  try {
+    links = await loadSocialLinks();
+  } catch {
+    /* Keep the shell available if the API is down. */
+  }
   return (
     <html lang="vi" suppressHydrationWarning>
       <body>
@@ -29,7 +36,7 @@ export default function RootLayout({
           </a>
           <Header />
           {children}
-          <Footer />
+          <Footer links={links} />
         </ThemeProvider>
       </body>
     </html>

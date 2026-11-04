@@ -1,10 +1,16 @@
 import type { MetadataRoute } from "next";
-import { projects } from "@/content/projects";
+import { loadProjects } from "@/lib/portfolio-api";
 import { getSiteUrl, isIndexable } from "@/lib/seo";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = getSiteUrl();
   if (!siteUrl || !isIndexable()) return [];
+  let projects;
+  try {
+    projects = await loadProjects();
+  } catch {
+    return [];
+  }
   const paths = [
     "/",
     "/projects",

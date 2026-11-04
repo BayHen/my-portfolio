@@ -30,8 +30,8 @@ Ghi ngày, người kiểm tra, môi trường, URL và kết quả thực tế 
 
 | Mục | Môi trường / ngày | Kết quả |
 | --- | --- | --- |
-| Lighthouse Performance | Chưa đo | Chưa xác nhận |
-| Lighthouse Accessibility | Chưa đo | Chưa xác nhận |
-| Lighthouse Best Practices | Chưa đo | Chưa xác nhận |
-| Lighthouse SEO | Chưa đo | Chưa xác nhận |
+| Lighthouse Performance | Local `next start`, Edge headless, 04/11/2026 | 89; LCP 3,1 giây, CLS 0,009 |
+| Lighthouse Accessibility | Local `next start`, Edge headless, 04/11/2026 | 100 |
+| Lighthouse Best Practices | Local `next start`, Edge headless, 04/11/2026 | 96 |
+| Lighthouse SEO | Local `next start`, Edge headless, 04/11/2026 | 63; `noindex` do nội dung mẫu |
 | Production URL | Chưa triển khai | Chưa xác nhận |

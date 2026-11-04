@@ -5,6 +5,7 @@ import {
   sendContactEmail,
 } from "@/lib/contact";
 import { validateContact } from "@/lib/contact-validation";
+import { getBackendUrl } from "@/lib/portfolio-api";
 
 export const runtime = "nodejs";
 
@@ -47,8 +48,12 @@ export async function POST(request: NextRequest) {
   const length = Number(request.headers.get("content-length") ?? 0);
   if (length > 7000)
     return NextResponse.json({ error: "Nội dung quá dài." }, { status: 413 });
-  const config = getContactConfig(process.env);
-  if (!config)
+  const backendUrl = getBackendUrl();
+  const config = backendUrl ? null : getContactConfig(process.env);
+  if (
+    (backendUrl && !process.env.BACKEND_CONTACT_PROXY_TOKEN) ||
+    (!backendUrl && !config)
+  )
     return NextResponse.json(
       { error: "Liên hệ chưa được cấu hình." },
       { status: 503 },
@@ -89,6 +94,38 @@ export async function POST(request: NextRequest) {
       { status: 429 },
     );
   try {
+    if (backendUrl) {
+      const response = await fetch(new URL("/api/v1/contact", backendUrl), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key":
+            request.headers.get("Idempotency-Key") || crypto.randomUUID(),
+          "X-Contact-Proxy-Token": process.env.BACKEND_CONTACT_PROXY_TOKEN!,
+          "X-Contact-Client-IP": ip,
+        },
+        body: JSON.stringify(value),
+        signal: AbortSignal.timeout(8000),
+        cache: "no-store",
+      });
+      if (!response.ok)
+        return NextResponse.json(
+          { error: "Không thể lưu lời nhắn. Vui lòng thử lại sau." },
+          { status: response.status === 429 ? 429 : 502 },
+        );
+      const result: { stored?: boolean; notification?: string } =
+        await response.json();
+      if (!result.stored)
+        return NextResponse.json(
+          { error: "Backend chưa xác nhận lưu lời nhắn." },
+          { status: 502 },
+        );
+      return NextResponse.json(
+        { accepted: true, stored: true, notification: result.notification },
+        { status: 202 },
+      );
+    }
+    if (!config) throw new Error("missing contact configuration");
     const result = await sendContactEmail(value, config);
     if (!result.accepted)
       return NextResponse.json(

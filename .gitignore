@@ -12,3 +12,11 @@ Thumbs.db
 test-results/
 playwright-report/
 frontend/artifacts/
+backend/.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+backend/.local-pg/
+backend/.local-pg-password
+*.egg-info/

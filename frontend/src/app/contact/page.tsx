@@ -5,7 +5,8 @@ import {
   SocialLinkCard,
 } from "@/components/projects/portfolio-parts";
 import { ContactForm } from "@/components/contact/contact-form";
-import { socialLinks, profile } from "@/content/profile";
+import { loadProfile, loadSocialLinks } from "@/lib/portfolio-api";
+import { getBackendUrl } from "@/lib/portfolio-api";
 import { getContactConfig } from "@/lib/contact";
 import { pageMetadata } from "@/lib/seo";
 
@@ -15,10 +16,20 @@ export const metadata: Metadata = pageMetadata(
   "Liên hệ với chủ sở hữu DEVFOLIO qua các kênh công khai hoặc biểu mẫu khi dịch vụ email được cấu hình.",
   "/contact",
 );
-const publicLinks = socialLinks.filter((link) => !link.placeholder);
-
-export default function ContactPage() {
-  const configured = !!getContactConfig(process.env);
+export default async function ContactPage() {
+  let profile = null;
+  let publicLinks = [] as Awaited<ReturnType<typeof loadSocialLinks>>;
+  try {
+    [profile, publicLinks] = await Promise.all([
+      loadProfile(),
+      loadSocialLinks(),
+    ]);
+  } catch {
+    /* Contact form stays available even if public profile API is down. */
+  }
+  const configured = getBackendUrl()
+    ? !!process.env.BACKEND_CONTACT_PROXY_TOKEN
+    : !!getContactConfig(process.env);
   return (
     <main id="main-content">
       <Container>
@@ -31,7 +42,7 @@ export default function ContactPage() {
           <div className="mt-12 grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
             <div>
               <h2 className="text-lg font-semibold">Kênh liên hệ</h2>
-              {profile.publicEmail && (
+              {profile?.publicEmail && (
                 <a
                   href={`mailto:${profile.publicEmail}`}
                   className="text-accent mt-4 inline-block underline-offset-4 hover:underline"
@@ -46,7 +57,7 @@ export default function ContactPage() {
                   ))}
                 </div>
               ) : (
-                !profile.publicEmail && (
+                !profile?.publicEmail && (
                   <p className="text-muted mt-4 max-w-sm leading-7">
                     TODO: Thêm email hoặc liên kết xã hội công khai đã xác nhận.
                   </p>

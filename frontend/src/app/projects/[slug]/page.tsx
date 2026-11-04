@@ -9,7 +9,8 @@ import {
   ExternalLink,
 } from "@/components/ui/primitives";
 import { TechnologyBadge } from "@/components/projects/portfolio-parts";
-import { getProjectBySlug, projects } from "@/content/projects";
+import { projects } from "@/content/projects";
+import { getBackendUrl, loadProject } from "@/lib/portfolio-api";
 import { Reveal } from "@/components/shared/reveal";
 import {
   pageMetadata,
@@ -19,14 +20,26 @@ import {
 } from "@/lib/seo";
 
 export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+  return getBackendUrl()
+    ? []
+    : projects.map((project) => ({ slug: project.slug }));
 }
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const project = getProjectBySlug((await params).slug);
+  let project;
+  try {
+    project = await loadProject((await params).slug);
+  } catch {
+    return pageMetadata(
+      "Dự án | DEVFOLIO",
+      "Không thể tải thông tin dự án.",
+      "/projects",
+      false,
+    );
+  }
   return project
     ? pageMetadata(
         `${project.title} | DEVFOLIO`,
@@ -75,7 +88,7 @@ export default async function ProjectDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const project = getProjectBySlug((await params).slug);
+  const project = await loadProject((await params).slug);
   if (!project) notFound();
   const siteUrl = getSiteUrl();
   const jsonLd =

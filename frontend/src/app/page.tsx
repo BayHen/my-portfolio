@@ -11,13 +11,34 @@ import {
   Divider,
   SectionHeading,
 } from "@/components/ui/primitives";
-import { profile } from "@/content/profile";
 import { Reveal } from "@/components/shared/reveal";
-import { projects, technologies } from "@/content/projects";
+import {
+  loadProfile,
+  loadProjects,
+  loadTechnologies,
+} from "@/lib/portfolio-api";
+import { ErrorState } from "@/components/shared/states";
 
 const groups = ["Backend", "Frontend", "Database", "DevOps", "Tools"] as const;
 
-export default function HomePage() {
+export default async function HomePage() {
+  let data;
+  try {
+    data = await Promise.all([
+      loadProfile(),
+      loadProjects(true),
+      loadTechnologies(),
+    ]);
+  } catch {
+    return (
+      <main id="main-content">
+        <Container className="py-20">
+          <ErrorState description="Không thể tải nội dung portfolio. Vui lòng thử lại sau." />
+        </Container>
+      </main>
+    );
+  }
+  const [profile, projects, technologies] = data;
   return (
     <main id="main-content">
       <Container>
@@ -29,7 +50,7 @@ export default function HomePage() {
           <div className="relative max-w-4xl">
             <Reveal hero>
               <p className="text-accent mb-7 font-mono text-xs font-semibold tracking-[.18em] uppercase">
-                {profile.placeholder
+                {!profile || profile.placeholder
                   ? "Giới thiệu mẫu / Đang cập nhật"
                   : profile.name}
               </p>
@@ -42,7 +63,8 @@ export default function HomePage() {
             </Reveal>
             <Reveal hero delay={0.16}>
               <p className="text-muted mt-8 max-w-2xl text-base leading-8 sm:text-lg">
-                {profile.headline}. {profile.bio}
+                {profile?.headline || "Python Backend / Full-stack Developer"}.{" "}
+                {profile?.bio || "Nội dung đang cập nhật."}
               </p>
             </Reveal>
             <Reveal hero delay={0.24}>
