@@ -6,7 +6,7 @@ import {
 } from "@/components/projects/portfolio-parts";
 import { Container, SectionHeading } from "@/components/ui/primitives";
 import { EmptyState, ErrorState } from "@/components/shared/states";
-import { loadProjects } from "@/lib/portfolio-api";
+import { getBackendUrl, loadProjects } from "@/lib/portfolio-api";
 import { pageMetadata } from "@/lib/seo";
 import { filterProjects } from "@/lib/project-filters";
 
@@ -66,7 +66,11 @@ export default async function ProjectsPage({
           <SectionHeading
             eyebrow="Projects / Index"
             title="Dự án & ý tưởng"
-            description="Danh sách hiện dùng dữ liệu mẫu để kiểm tra trang và bộ lọc. Nội dung thực tế sẽ được thay thế sau khi xác nhận."
+            description={
+              getBackendUrl()
+                ? "Các dự án đã xuất bản từ DEVFOLIO API."
+                : "Danh sách hiện dùng dữ liệu mẫu để kiểm tra trang và bộ lọc. Nội dung thực tế sẽ được thay thế sau khi xác nhận."
+            }
           />
           <div className="border-line mt-10 space-y-5 border-y py-6">
             <div>

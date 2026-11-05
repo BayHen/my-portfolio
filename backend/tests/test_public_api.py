@@ -1,8 +1,9 @@
 from datetime import datetime, timezone
 
 import pytest
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
+from app.db.session import get_db
 from app.models import ContactMessage, Experience, Profile, Project, Technology
 
 
@@ -101,4 +102,31 @@ def test_constraints_and_transaction_rollback(db):
 def test_health_and_request_id(client):
     response = client.get("/api/v1/health")
     assert response.status_code == 200
+    assert response.json() == {"status": "ok", "service": "devfolio-api"}
     assert response.headers.get("x-request-id")
+    assert client.get("/api/v1/health/db").json()["database"] == "connected"
+
+
+def test_database_health_reports_failure_without_credentials(client):
+    def unavailable_db():
+        raise SQLAlchemyError("connection details must stay private")
+        yield  # pragma: no cover
+
+    client.app.dependency_overrides[get_db] = unavailable_db
+    response = client.get("/api/v1/health/db")
+    assert response.status_code == 503
+    assert response.json()["error"]["code"] == "database_unavailable"
+    assert "connection details" not in response.text
+    assert client.get("/api/v1/health").status_code == 200
+
+
+def test_cors_allows_configured_frontend_only(client):
+    headers = {"Access-Control-Request-Method": "GET"}
+    allowed = client.options(
+        "/api/v1/projects", headers={**headers, "Origin": "http://localhost:3000"}
+    )
+    denied = client.options(
+        "/api/v1/projects", headers={**headers, "Origin": "https://other.example"}
+    )
+    assert allowed.headers["access-control-allow-origin"] == "http://localhost:3000"
+    assert "access-control-allow-origin" not in denied.headers

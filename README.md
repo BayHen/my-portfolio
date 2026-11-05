@@ -1,5 +1,13 @@
 # DEVFOLIO
 
+## Backend và frontend cục bộ
+
+Backend FastAPI đã có tại `backend/`, PostgreSQL có thể chạy bằng `compose.yaml` hoặc cluster cục bộ. Xem [thiết lập backend](docs/backend-setup.md), [database](docs/database.md), [API](docs/api.md) và [kết nối frontend](docs/frontend-backend-integration.md). Cấu hình `BACKEND_API_URL` ở `frontend/.env.local` để Next.js đọc dữ liệu backend; khi để trống, trang dùng nội dung mẫu cục bộ. Dự án và hồ sơ mẫu chưa được nhập vào database như dữ liệu thật.
+
+Trên PowerShell, tạo `.env` ở gốc từ `.env.example`, thay `DEVFOLIO_DB_PASSWORD`, rồi chạy `docker compose up -d postgres`. Tạo `backend/.env` từ `backend/.env.example` và đặt `DATABASE_URL`, `CONTACT_HASH_SECRET`; chạy migration trước khi mở API bằng `uvicorn`. Cổng Docker mặc định là `5435`, tách biệt PostgreSQL cục bộ cổng `5434` đã cấu hình cho pgAdmin.
+
+Quản trị nội dung Phase 7: xem [docs/admin.md](docs/admin.md) để thiết lập tài khoản, phiên đăng nhập, lưu ảnh và chạy dashboard. Không có đăng ký quản trị công khai.
+
 Giai đoạn 6 bổ sung FastAPI và PostgreSQL trong `backend/`. Xem [hướng dẫn backend](docs/backend.md) để cấu hình cơ sở dữ liệu, chạy migration, nhập nội dung đã xác minh và kết nối frontend. Khi chưa cấu hình `BACKEND_API_URL`, frontend tiếp tục dùng dữ liệu mẫu cục bộ.
 
 Nền tảng portfolio cá nhân cho lập trình viên Python Backend / Full-stack. Giai đoạn 1 thiết lập ứng dụng Next.js, dữ liệu nội dung cục bộ có kiểu rõ ràng và quy trình phát triển. Các thông tin cá nhân trong mã nguồn hiện là dữ liệu mẫu, không đại diện cho người thật.

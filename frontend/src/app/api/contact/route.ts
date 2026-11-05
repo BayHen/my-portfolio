@@ -35,7 +35,20 @@ async function readPayload(request: NextRequest): Promise<unknown> {
 
 export async function POST(request: NextRequest) {
   const origin = request.headers.get("origin");
-  if (!origin || origin !== request.nextUrl.origin)
+  const requestHost = request.headers.get("host");
+  const requestProtocol =
+    request.headers.get("x-forwarded-proto") ||
+    request.nextUrl.protocol.slice(0, -1);
+  let sameOrigin = false;
+  try {
+    const parsed = new URL(origin || "");
+    sameOrigin =
+      parsed.host === requestHost &&
+      parsed.protocol === `${requestProtocol}:`;
+  } catch {
+    // Missing or malformed Origin must be rejected.
+  }
+  if (!sameOrigin)
     return NextResponse.json(
       { error: "Nguồn gửi không hợp lệ." },
       { status: 403 },
@@ -88,7 +101,7 @@ export async function POST(request: NextRequest) {
     );
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (!allowContactAttempt(ip))
+  if (!backendUrl && !allowContactAttempt(ip))
     return NextResponse.json(
       { error: "Bạn đã gửi quá nhiều lần. Vui lòng thử lại sau." },
       { status: 429 },

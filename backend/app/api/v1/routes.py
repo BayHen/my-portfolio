@@ -24,9 +24,14 @@ Db = Annotated[Session, Depends(get_db)]
 
 
 @router.get("/health")
-def health(db: Db) -> dict[str, str]:
+def health() -> dict[str, str]:
+    return {"status": "ok", "service": "devfolio-api"}
+
+
+@router.get("/health/db")
+def database_health(db: Db) -> dict[str, str]:
     db.execute(text("SELECT 1"))
-    return {"status": "ok"}
+    return {"status": "ok", "service": "devfolio-api", "database": "connected"}
 
 
 @router.get("/projects", response_model=ProjectPage)

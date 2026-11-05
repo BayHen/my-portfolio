@@ -1,6 +1,10 @@
 from app.models.entities import (
+    AdminAccount,
+    AdminSession,
+    AuditEvent,
     ContactMessage,
     Experience,
+    LoginAttempt,
     Profile,
     Project,
     ProjectImage,
@@ -9,7 +13,11 @@ from app.models.entities import (
 )
 
 __all__ = [
+    "AdminAccount",
+    "AdminSession",
+    "AuditEvent",
     "ContactMessage",
+    "LoginAttempt",
     "Experience",
     "Profile",
     "Project",

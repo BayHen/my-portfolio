@@ -34,3 +34,9 @@ Khi nội dung được xác nhận, route dự án có thể dùng dữ liệu 
 ## Quyết định còn mở
 
 Tên miền, danh tính và nội dung thật, nhà cung cấp gửi thư, lưu trữ ảnh, hosting, chính sách bảo mật và yêu cầu phân tích truy cập. Chỉ chốt khi có thông tin của chủ sở hữu.
+# Bổ sung kiến trúc Phase 6
+
+Phase 7 bổ sung route quản trị Next.js cùng origin, API FastAPI có phiên PostgreSQL, CSRF và lưu ảnh S3. Chi tiết quyết định và topology xem [admin.md](admin.md).
+
+Backend FastAPI trong `backend/` là nguồn dữ liệu công khai khi `BACKEND_API_URL` được cấu hình. Frontend gọi API từ Server Components, làm mới cache sau 60 giây và giữ nội dung mẫu cục bộ khi chưa bật tích hợp. Điều này cho phép chuyển dữ liệu từng bước mà không hiển thị bản nháp. Contact route của Next.js chuyển tiếp đến FastAPI khi có proxy token; nếu chưa bật backend, đường gửi Resend hiện có vẫn dùng được. Schema được quản lý bằng Alembic, không tạo bảng khi khởi động ứng dụng. Chi tiết API, nhập dữ liệu và môi trường xem tại [backend.md](backend.md).
+

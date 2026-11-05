@@ -99,6 +99,7 @@ class Experience(Base):
     organization: Mapped[str] = mapped_column(String(160))
     start_date: Mapped[str] = mapped_column(String(30))
     end_date: Mapped[str | None] = mapped_column(String(30))
+    current: Mapped[bool] = mapped_column(default=False)
     summary: Mapped[str] = mapped_column(Text)
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
     position: Mapped[int] = mapped_column(Integer, default=0)
@@ -137,4 +138,51 @@ class ContactMessage(Base):
     message: Mapped[str] = mapped_column(Text)
     ip_hash: Mapped[str] = mapped_column(String(64))
     notification_status: Mapped[str] = mapped_column(String(30), default="not_configured")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class AdminAccount(Base):
+    __tablename__ = "admin_accounts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    email: Mapped[str] = mapped_column(String(254), unique=True, index=True)
+    password_hash: Mapped[str] = mapped_column(String(500))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class AdminSession(Base):
+    __tablename__ = "admin_sessions"
+    __table_args__ = (Index("ix_admin_sessions_expiry", "expires_at"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    account_id: Mapped[int] = mapped_column(ForeignKey("admin_accounts.id", ondelete="CASCADE"))
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    csrf_token: Mapped[str] = mapped_column(String(64))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    account: Mapped[AdminAccount] = relationship()
+
+
+class LoginAttempt(Base):
+    __tablename__ = "login_attempts"
+    __table_args__ = (Index("ix_login_attempts_ip_created", "ip_hash", "created_at"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ip_hash: Mapped[str] = mapped_column(String(64))
+    succeeded: Mapped[bool] = mapped_column(default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class AuditEvent(Base):
+    __tablename__ = "audit_events"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    actor_id: Mapped[int | None] = mapped_column(
+        ForeignKey("admin_accounts.id", ondelete="SET NULL")
+    )
+    action: Mapped[str] = mapped_column(String(80))
+    target_type: Mapped[str | None] = mapped_column(String(80))
+    target_id: Mapped[str | None] = mapped_column(String(120))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

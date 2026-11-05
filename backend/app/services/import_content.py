@@ -187,6 +187,7 @@ def import_content(db: Session, content: ContentInput) -> dict[str, int]:
             )
             db.add(record)
         record.end_date = item.end_date
+        record.current = item.end_date is None
         record.summary = item.summary
         record.position = item.position
         record.published_at = (

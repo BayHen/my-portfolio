@@ -5,8 +5,9 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
+from app.api.v1.admin import router as admin_router
 from app.api.v1.routes import router
 from app.core.config import Settings, get_settings
 from app.core.errors import AppError
@@ -28,7 +29,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.dependency_overrides[get_settings] = lambda: settings
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[config.frontend_origin],
+        allow_origins=list(dict.fromkeys([config.frontend_origin, *config.cors_origins])),
         allow_methods=["GET", "POST"],
         allow_headers=["Content-Type", "Idempotency-Key"],
     )
@@ -74,12 +75,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             request, 503, "database_unavailable", "Service temporarily unavailable."
         )
 
+    @app.exception_handler(IntegrityError)
+    async def constraint_error(request: Request, exc: IntegrityError) -> JSONResponse:
+        return error_response(request, 409, "conflict", "Resource conflicts with existing data.")
+
     @app.exception_handler(Exception)
     async def unexpected_error(request: Request, exc: Exception) -> JSONResponse:
         logger.error("unexpected failure %s", type(exc).__name__)
         return error_response(request, 500, "internal_error", "Internal server error.")
 
     app.include_router(router)
+    app.include_router(admin_router)
     return app
 
 

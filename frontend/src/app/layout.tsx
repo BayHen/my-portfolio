@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
+import { SiteChrome } from "@/components/layout/site-chrome";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import "@/styles/globals.css";
 import { pageMetadata } from "@/lib/seo";
@@ -34,9 +33,7 @@ export default async function RootLayout({
           <a href="#main-content" className="skip-link">
             Bỏ qua điều hướng
           </a>
-          <Header />
-          {children}
-          <Footer links={links} />
+          <SiteChrome links={links}>{children}</SiteChrome>
         </ThemeProvider>
       </body>
     </html>

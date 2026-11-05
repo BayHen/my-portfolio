@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: devfolio
+      POSTGRES_DB: devfolio_dev
+      POSTGRES_PASSWORD: ${DEVFOLIO_DB_PASSWORD:?Set DEVFOLIO_DB_PASSWORD in the root .env file}
+    ports:
+      - "127.0.0.1:${DEVFOLIO_DB_PORT:-5435}:5432"
+    volumes:
+      - devfolio_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devfolio -d devfolio_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  devfolio_postgres_data:

@@ -2,6 +2,7 @@ import os
 
 os.environ.setdefault("DATABASE_URL", "sqlite://")
 os.environ.setdefault("CONTACT_HASH_SECRET", "isolated-test-secret-of-sufficient-length")
+os.environ["DEBUG"] = "false"
 
 import pytest
 from fastapi.testclient import TestClient
@@ -39,7 +40,9 @@ def db():
 @pytest.fixture
 def client(db):
     settings = Settings(
-        database_url="sqlite://", contact_hash_secret="isolated-test-secret-of-sufficient-length"
+        database_url="sqlite://",
+        contact_hash_secret="isolated-test-secret-of-sufficient-length",
+        admin_cookie_secure=False,
     )
     app = create_app(settings)
 

@@ -19,4 +19,6 @@ __pycache__/
 *.pyc
 backend/.local-pg/
 backend/.local-pg-password
+backend/.local-pg-phase7-*/
+backend/.local-pg-phase7-password
 *.egg-info/
