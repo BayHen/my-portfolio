@@ -1,8 +1,10 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
 import { motionSettings } from "@/lib/motion-settings";
+
+const subscribe = () => () => {};
 
 export function Reveal({
   children,
@@ -18,13 +20,8 @@ export function Reveal({
   // The reduced-motion preference is unavailable during SSR. Keep the server
   // markup and the first client render identical, then honor the preference.
   const prefersReducedMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const reduced = mounted && !!prefersReducedMotion;
+  const hydrated = useSyncExternalStore(subscribe, () => true, () => false);
+  const reduced = hydrated && !!prefersReducedMotion;
   const settings = motionSettings(reduced, delay);
 
   return (
