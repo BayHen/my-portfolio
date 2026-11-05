@@ -179,16 +179,19 @@ export function ProjectsManager() {
       repository_url: editing.repository_url || null,
       live_url: editing.live_url || null,
     };
-    await act(async () => {
-      const result = await adminRequest<Project>(
-        editing.id ? `/projects/${editing.id}` : "/projects",
-        {
-          method: editing.id ? "PUT" : "POST",
-          body: JSON.stringify(payload),
-        },
-      );
-      setEditing(result);
-    }, editing.published_at ? "Đã lưu thay đổi công khai." : "Đã lưu bản nháp.");
+    await act(
+      async () => {
+        const result = await adminRequest<Project>(
+          editing.id ? `/projects/${editing.id}` : "/projects",
+          {
+            method: editing.id ? "PUT" : "POST",
+            body: JSON.stringify(payload),
+          },
+        );
+        setEditing(result);
+      },
+      editing.published_at ? "Đã lưu thay đổi công khai." : "Đã lưu bản nháp.",
+    );
   }
   async function remove() {
     await act(async () => {
@@ -197,14 +200,21 @@ export function ProjectsManager() {
     }, "Đã xóa dự án.");
   }
   async function moveImage(imageId: number, direction: -1 | 1) {
-    const ids = [...editing.images].sort((a, b) => a.position - b.position).map((image) => image.id);
+    const ids = [...editing.images]
+      .sort((a, b) => a.position - b.position)
+      .map((image) => image.id);
     const index = ids.indexOf(imageId);
     const other = index + direction;
     if (other < 0 || other >= ids.length) return;
     [ids[index], ids[other]] = [ids[other], ids[index]];
-    await act(() => adminRequest(`/projects/${editing.id}/images/order`, {
-      method: "PUT", body: JSON.stringify({ image_ids: ids }),
-    }), "Đã đổi thứ tự.");
+    await act(
+      () =>
+        adminRequest(`/projects/${editing.id}/images/order`, {
+          method: "PUT",
+          body: JSON.stringify({ image_ids: ids }),
+        }),
+      "Đã đổi thứ tự.",
+    );
   }
   if (loading) return <AdminLoading />;
   return (
@@ -345,7 +355,9 @@ export function ProjectsManager() {
             <Notice message={notice} />
             <div className="flex flex-wrap gap-3">
               <Button type="submit" disabled={busy}>
-                {editing.published_at ? "Lưu thay đổi công khai" : "Lưu bản nháp"}
+                {editing.published_at
+                  ? "Lưu thay đổi công khai"
+                  : "Lưu bản nháp"}
               </Button>
               {editing.id > 0 && (
                 <>
@@ -409,7 +421,14 @@ export function ProjectsManager() {
                     >
                       ↑
                     </Button>
-                    <Button type="button" variant="quiet" disabled={busy} onClick={() => void moveImage(image.id, 1)}>↓</Button>
+                    <Button
+                      type="button"
+                      variant="quiet"
+                      disabled={busy}
+                      onClick={() => void moveImage(image.id, 1)}
+                    >
+                      ↓
+                    </Button>
                     <ConfirmButton
                       label="Xóa ảnh"
                       confirmText="Xóa ảnh này?"

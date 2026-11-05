@@ -25,7 +25,9 @@ export function LoginForm() {
       if (response.status === 401)
         throw new Error("Email hoặc mật khẩu không đúng.");
       if (response.status === 429)
-        throw new Error("Đã thử đăng nhập quá nhiều lần. Vui lòng thử lại sau.");
+        throw new Error(
+          "Đã thử đăng nhập quá nhiều lần. Vui lòng thử lại sau.",
+        );
       if (!response.ok)
         throw new Error("Không thể đăng nhập lúc này. Vui lòng thử lại sau.");
       router.replace("/admin");

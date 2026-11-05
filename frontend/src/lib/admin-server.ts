@@ -19,6 +19,7 @@ export async function adminServerGet<T>(path: string): Promise<T | null> {
     throw new Error("Admin backend is unavailable.");
   });
   if (response.status === 401) return null;
-  if (!response.ok) throw new Error(`Admin backend returned ${response.status}.`);
+  if (!response.ok)
+    throw new Error(`Admin backend returned ${response.status}.`);
   return (await response.json()) as T;
 }

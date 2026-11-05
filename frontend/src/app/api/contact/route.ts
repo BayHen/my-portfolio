@@ -43,8 +43,7 @@ export async function POST(request: NextRequest) {
   try {
     const parsed = new URL(origin || "");
     sameOrigin =
-      parsed.host === requestHost &&
-      parsed.protocol === `${requestProtocol}:`;
+      parsed.host === requestHost && parsed.protocol === `${requestProtocol}:`;
   } catch {
     // Missing or malformed Origin must be rejected.
   }

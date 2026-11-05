@@ -21,11 +21,14 @@ async function proxy(request: NextRequest, context: Context) {
   const write = !["GET", "HEAD"].includes(request.method);
   const origin = request.headers.get("origin");
   const requestHost = request.headers.get("host");
-  const requestProtocol = request.headers.get("x-forwarded-proto") || request.nextUrl.protocol.slice(0, -1);
+  const requestProtocol =
+    request.headers.get("x-forwarded-proto") ||
+    request.nextUrl.protocol.slice(0, -1);
   let sameOrigin = false;
   try {
     const parsed = new URL(origin || "");
-    sameOrigin = parsed.host === requestHost && parsed.protocol === `${requestProtocol}:`;
+    sameOrigin =
+      parsed.host === requestHost && parsed.protocol === `${requestProtocol}:`;
   } catch {
     /* Reject malformed or missing Origin on writes. */
   }
