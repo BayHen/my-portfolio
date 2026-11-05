@@ -8,8 +8,9 @@ import {
   Field,
   Notice,
 } from "@/components/admin/admin-ui";
-import { Button, Input } from "@/components/ui/primitives";
+import { Button } from "@/components/ui/primitives";
 import { adminRequest } from "@/lib/admin-client";
+import { MediaAssignments } from "@/components/admin/media-assignments";
 
 type Technology = { id: number; name: string; category: string };
 type Image = { id: number; src: string; alt: string; position: number };
@@ -199,21 +200,21 @@ export function ProjectsManager() {
       setEditing(blank);
     }, "Đã xóa dự án.");
   }
-  async function moveImage(imageId: number, direction: -1 | 1) {
+  async function moveLegacyImage(imageId: number, direction: -1 | 1) {
     const ids = [...editing.images]
-      .sort((a, b) => a.position - b.position)
+      .sort((left, right) => left.position - right.position)
       .map((image) => image.id);
-    const index = ids.indexOf(imageId);
-    const other = index + direction;
-    if (other < 0 || other >= ids.length) return;
-    [ids[index], ids[other]] = [ids[other], ids[index]];
+    const from = ids.indexOf(imageId);
+    const to = from + direction;
+    if (to < 0 || to >= ids.length) return;
+    [ids[from], ids[to]] = [ids[to], ids[from]];
     await act(
       () =>
         adminRequest(`/projects/${editing.id}/images/order`, {
           method: "PUT",
           body: JSON.stringify({ image_ids: ids }),
         }),
-      "Đã đổi thứ tự.",
+      "Đã đổi thứ tự ảnh cũ.",
     );
   }
   if (loading) return <AdminLoading />;
@@ -391,16 +392,19 @@ export function ProjectsManager() {
             </div>
           </form>
           {editing.id > 0 && (
-            <section className="border-line mt-9 border-t pt-7">
-              <h3 className="text-lg font-semibold">Hình ảnh</h3>
-              <p className="text-muted mt-1 text-sm">
-                JPEG, PNG hoặc WebP; tối đa 5 MB; lưu trong S3 đã cấu hình.
+            <MediaAssignments key={editing.id} projectId={editing.id} />
+          )}
+          {editing.images.length > 0 && (
+            <section className="border-line mt-8 space-y-3 border-t pt-7">
+              <h3 className="text-lg font-semibold">Ảnh dự án từ cơ chế cũ</h3>
+              <p className="text-muted text-sm">
+                Quản lý ảnh đã có; tải ảnh mới qua Media Library ở trên.
               </p>
-              <ul className="mt-4 space-y-3">
+              <ul className="space-y-2">
                 {editing.images.map((image) => (
                   <li
                     key={image.id}
-                    className="border-line flex flex-wrap items-center gap-3 rounded-lg border p-3"
+                    className="border-line flex flex-wrap items-center gap-2 rounded-lg border p-3"
                   >
                     <a
                       href={image.src}
@@ -410,14 +414,12 @@ export function ProjectsManager() {
                     >
                       {image.alt}
                     </a>
-                    <span className="text-muted text-xs">
-                      Thứ tự {image.position}
-                    </span>
                     <Button
                       type="button"
                       variant="quiet"
                       disabled={busy}
-                      onClick={() => void moveImage(image.id, -1)}
+                      onClick={() => void moveLegacyImage(image.id, -1)}
+                      aria-label={`Đưa ${image.alt} lên`}
                     >
                       ↑
                     </Button>
@@ -425,12 +427,13 @@ export function ProjectsManager() {
                       type="button"
                       variant="quiet"
                       disabled={busy}
-                      onClick={() => void moveImage(image.id, 1)}
+                      onClick={() => void moveLegacyImage(image.id, 1)}
+                      aria-label={`Đưa ${image.alt} xuống`}
                     >
                       ↓
                     </Button>
                     <ConfirmButton
-                      label="Xóa ảnh"
+                      label="Xóa ảnh cũ"
                       confirmText="Xóa ảnh này?"
                       disabled={busy}
                       onConfirm={() =>
@@ -440,58 +443,13 @@ export function ProjectsManager() {
                               `/projects/${editing.id}/images/${image.id}`,
                               { method: "DELETE" },
                             ),
-                          "Đã xóa ảnh.",
+                          "Đã xóa ảnh cũ.",
                         )
                       }
                     />
                   </li>
                 ))}
               </ul>
-              <form
-                className="mt-5 space-y-3"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  const data = new FormData(event.currentTarget);
-                  void act(
-                    () =>
-                      adminRequest(`/projects/${editing.id}/images`, {
-                        method: "POST",
-                        body: data,
-                      }),
-                    "Đã tải ảnh lên.",
-                  );
-                }}
-              >
-                <label
-                  htmlFor="project-image"
-                  className="block text-sm font-medium"
-                >
-                  Tệp ảnh
-                </label>
-                <Input
-                  id="project-image"
-                  type="file"
-                  name="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  required
-                />
-                <label
-                  htmlFor="project-image-alt"
-                  className="block text-sm font-medium"
-                >
-                  Mô tả ảnh
-                </label>
-                <Input
-                  id="project-image-alt"
-                  name="alt"
-                  required
-                  minLength={3}
-                  maxLength={300}
-                />
-                <Button type="submit" disabled={busy}>
-                  Tải ảnh lên
-                </Button>
-              </form>
             </section>
           )}
         </section>

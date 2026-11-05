@@ -12,7 +12,9 @@ import {
   SectionHeading,
 } from "@/components/ui/primitives";
 import { Reveal } from "@/components/shared/reveal";
+import { PortfolioImage } from "@/components/shared/portfolio-image";
 import {
+  loadMediaAssignments,
   loadProfile,
   loadProjects,
   loadTechnologies,
@@ -28,6 +30,7 @@ export default async function HomePage() {
       loadProfile(),
       loadProjects(true),
       loadTechnologies(),
+      loadMediaAssignments(),
     ]);
   } catch {
     return (
@@ -38,23 +41,46 @@ export default async function HomePage() {
       </main>
     );
   }
-  const [profile, projects, technologies] = data;
+  const [profile, projects, technologies, media] = data;
+  const avatar = media.find((item) => item.slot === "hero_avatar")?.asset;
+  const background = media.find(
+    (item) => item.slot === "hero_background",
+  )?.asset;
   return (
     <main id="main-content">
       <Container>
         <section className="border-line relative overflow-hidden border-b py-20 sm:py-28 lg:py-36">
-          <div
-            aria-hidden="true"
-            className="border-line absolute top-10 right-2 hidden size-24 rounded-full border lg:block"
-          />
+          {background && (
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[.08]"
+              aria-hidden="true"
+            >
+              <PortfolioImage
+                src={background.url}
+                alt=""
+                sizes="100vw"
+                fallback={null}
+              />
+            </div>
+          )}
           <div className="relative max-w-4xl">
-            <Reveal hero>
-              <p className="text-accent mb-7 font-mono text-xs font-semibold tracking-[.18em] uppercase">
-                {!profile || profile.placeholder
-                  ? "Giới thiệu mẫu / Đang cập nhật"
-                  : profile.name}
-              </p>
-            </Reveal>
+            <div className="mb-7 flex items-center justify-between gap-5">
+              <Reveal hero>
+                <p className="text-accent font-mono text-xs font-semibold tracking-[.18em] uppercase">
+                  {!profile || profile.placeholder
+                    ? "Giới thiệu mẫu / Đang cập nhật"
+                    : profile.name}
+                </p>
+              </Reveal>
+              <div className="border-line bg-subtle relative flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-full border font-mono text-lg font-semibold sm:size-24">
+                <PortfolioImage
+                  src={avatar?.url}
+                  alt={avatar?.alt || "Ảnh đại diện"}
+                  sizes="96px"
+                  fallback={<span aria-label="Chưa có ảnh đại diện">DF.</span>}
+                />
+              </div>
+            </div>
             <Reveal hero delay={0.08}>
               <h1 className="text-[clamp(3rem,8vw,7.2rem)] leading-[1.02] font-semibold tracking-[-.075em]">
                 Xây dựng sản phẩm từ{" "}

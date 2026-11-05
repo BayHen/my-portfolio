@@ -6,7 +6,7 @@ import type {
 } from "@/types/portfolio";
 import { Badge, Card, ExternalLink } from "@/components/ui/primitives";
 import Link from "next/link";
-import Image from "next/image";
+import { PortfolioImage } from "@/components/shared/portfolio-image";
 import type { HTMLAttributes, ReactNode } from "react";
 import { Reveal } from "@/components/shared/reveal";
 
@@ -29,19 +29,17 @@ export function ProjectCard({ project }: { project: Project }) {
     <Reveal>
       <Card className="group hover:border-accent focus-within:border-accent transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:shadow-lg">
         <div className="bg-subtle border-line relative mb-6 flex aspect-[16/9] items-end overflow-hidden rounded-[var(--radius-sm)] border p-5">
-          {project.thumbnail ? (
-            <Image
-              src={project.thumbnail.src}
-              alt={project.thumbnail.alt}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            />
-          ) : (
-            <span className="text-muted font-mono text-xs tracking-[.12em] uppercase">
-              Hình ảnh đang cập nhật
-            </span>
-          )}
+          <PortfolioImage
+            src={project.thumbnail?.src}
+            alt={project.thumbnail?.alt || "Ảnh dự án"}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            fallback={
+              <span className="text-muted font-mono text-xs tracking-[.12em] uppercase">
+                Hình ảnh đang cập nhật
+              </span>
+            }
+          />
         </div>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <h3 className="text-xl font-semibold tracking-tight">

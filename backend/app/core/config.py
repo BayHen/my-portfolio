@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     s3_region: str = "us-east-1"
     s3_endpoint_url: str | None = None
     s3_public_base_url: str | None = None
+    media_storage_dir: str = "data/media"
+    media_public_base_url: str = "http://127.0.0.1:8000"
 
     @model_validator(mode="after")
     def production_admin_security(self):
@@ -46,6 +48,10 @@ class Settings(BaseSettings):
             and not self.s3_public_base_url.startswith("https://")
         ):
             raise ValueError("Production image URLs must use HTTPS")
+        if self.app_env == "production" and (not self.s3_bucket or not self.s3_public_base_url):
+            raise ValueError("Production media storage requires S3 and a public HTTPS URL")
+        if self.app_env == "production" and not self.media_public_base_url.startswith("https://"):
+            raise ValueError("Production media public URL must use HTTPS")
         return self
 
     @property

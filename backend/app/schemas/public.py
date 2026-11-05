@@ -39,6 +39,7 @@ class ProjectOut(BaseModel):
     repository_url: str | None
     live_url: str | None
     technologies: list[TechnologyOut]
+    thumbnail: ImageOut | None = None
     images: list[ImageOut]
 
 

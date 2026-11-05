@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { profile } from "@/content/profile";
 import { projects } from "@/content/projects";
-import { getBackendUrl } from "@/lib/portfolio-api";
+import { getBackendUrl, loadMediaAssignments } from "@/lib/portfolio-api";
 
 export function getSiteUrl(env: NodeJS.ProcessEnv = process.env): URL | null {
   const raw = env.SITE_URL?.trim();
@@ -71,4 +71,34 @@ export function pageMetadata(
 
 export function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
+export async function withMediaOpenGraph(
+  base: Metadata,
+  preferred?: { src: string; alt: string },
+): Promise<Metadata> {
+  let image = preferred;
+  if (!image) {
+    try {
+      const assigned = (await loadMediaAssignments()).find(
+        (item) => item.slot === "open_graph",
+      )?.asset;
+      if (assigned) image = { src: assigned.url, alt: assigned.alt };
+    } catch {
+      // Keep text metadata when the media API is unavailable.
+    }
+  }
+  if (!image) return base;
+  return {
+    ...base,
+    openGraph: {
+      ...base.openGraph,
+      images: [{ url: image.src, alt: image.alt }],
+    },
+    twitter: {
+      ...base.twitter,
+      card: "summary_large_image",
+      images: [image.src],
+    },
+  };
 }

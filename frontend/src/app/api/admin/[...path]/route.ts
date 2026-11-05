@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getBackendUrl } from "@/lib/portfolio-api";
 
 export const runtime = "nodejs";
@@ -70,6 +71,8 @@ async function proxy(request: NextRequest, context: Context) {
     if (responseType) response.headers.set("content-type", responseType);
     const setCookie = upstream.headers.get("set-cookie");
     if (setCookie) response.headers.set("set-cookie", setCookie);
+    if (write && upstream.ok && path[0] === "media")
+      revalidatePath("/", "layout");
     return response;
   } catch {
     return NextResponse.json(

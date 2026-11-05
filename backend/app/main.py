@@ -8,6 +8,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from app.api.v1.admin import router as admin_router
+from app.api.v1.media import admin_router as admin_media_router
+from app.api.v1.media import public_router as public_media_router
 from app.api.v1.routes import router
 from app.core.config import Settings, get_settings
 from app.core.errors import AppError
@@ -85,7 +87,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return error_response(request, 500, "internal_error", "Internal server error.")
 
     app.include_router(router)
+    app.include_router(public_media_router)
     app.include_router(admin_router)
+    app.include_router(admin_media_router)
     return app
 
 

@@ -13,6 +13,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     func,
+    text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -89,6 +90,49 @@ class ProjectImage(Base):
     alt: Mapped[str] = mapped_column(String(300))
     position: Mapped[int] = mapped_column(Integer, default=0)
     project: Mapped[Project] = relationship(back_populates="images")
+
+
+class MediaAsset(Base):
+    __tablename__ = "media_assets"
+    __table_args__ = (
+        CheckConstraint("byte_size > 0", name="ck_media_assets_size"),
+        CheckConstraint("width > 0 AND height > 0", name="ck_media_assets_dimensions"),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    storage_key: Mapped[str] = mapped_column(String(200), unique=True)
+    storage_backend: Mapped[str] = mapped_column(String(10))
+    url: Mapped[str] = mapped_column(String(600))
+    alt: Mapped[str] = mapped_column(String(300))
+    content_type: Mapped[str] = mapped_column(String(40))
+    byte_size: Mapped[int] = mapped_column(Integer)
+    width: Mapped[int] = mapped_column(Integer)
+    height: Mapped[int] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    assignments: Mapped[list["MediaAssignment"]] = relationship(back_populates="asset")
+
+
+class MediaAssignment(Base):
+    __tablename__ = "media_assignments"
+    __table_args__ = (
+        CheckConstraint("position >= 0", name="ck_media_assignments_position"),
+        UniqueConstraint("slot", "project_id", "position", name="uq_media_assignment_position"),
+        Index("ix_media_assignments_asset_id", "asset_id"),
+        Index(
+            "uq_media_global_slot",
+            "slot",
+            unique=True,
+            postgresql_where=text("project_id IS NULL"),
+            sqlite_where=text("project_id IS NULL"),
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    asset_id: Mapped[str] = mapped_column(ForeignKey("media_assets.id", ondelete="RESTRICT"))
+    slot: Mapped[str] = mapped_column(String(40), index=True)
+    project_id: Mapped[int | None] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"))
+    position: Mapped[int] = mapped_column(Integer, default=0)
+    asset: Mapped[MediaAsset] = relationship(back_populates="assignments")
 
 
 class Experience(Base):

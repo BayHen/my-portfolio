@@ -5,6 +5,7 @@ import type {
   SocialLink,
   Technology,
 } from "@/types/portfolio";
+import type { PublicMediaAssignment } from "@/types/media";
 import {
   experiences as localExperiences,
   profile as localProfile,
@@ -40,6 +41,7 @@ type ApiProject = {
   live_url: string | null;
   technologies: ApiTechnology[];
   images: ApiImage[];
+  thumbnail?: ApiImage | null;
 };
 type ApiProfile = {
   name: string;
@@ -142,10 +144,15 @@ function mapProject(item: ApiProject): Project {
     repositoryUrl: item.repository_url || undefined,
     liveUrl: item.live_url || undefined,
     technologies: item.technologies.map(mapTechnology),
-    thumbnail: item.images[0],
-    screenshots: item.images.slice(1),
+    thumbnail: item.thumbnail || item.images[0],
+    screenshots: item.thumbnail ? item.images : item.images.slice(1),
     placeholder: false,
   };
+}
+
+export async function loadMediaAssignments(): Promise<PublicMediaAssignment[]> {
+  if (!getBackendUrl()) return [];
+  return apiGet<PublicMediaAssignment[]>("/media/assignments");
 }
 
 export async function loadProjects(featured?: boolean): Promise<Project[]> {

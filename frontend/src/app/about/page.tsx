@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PortfolioImage } from "@/components/shared/portfolio-image";
 import {
   Container,
   Divider,
@@ -13,19 +14,24 @@ import {
 import { EmptyState, ErrorState } from "@/components/shared/states";
 import {
   loadExperiences,
+  loadMediaAssignments,
   loadProfile,
   loadTechnologies,
 } from "@/lib/portfolio-api";
 import { getResumeHref } from "@/lib/resume";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, withMediaOpenGraph } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata(
-  "Giới thiệu | DEVFOLIO",
-  "Tìm hiểu định hướng chuyên môn, nền tảng kỹ thuật và hành trình phát triển của DEVFOLIO.",
-  "/about",
-);
+export async function generateMetadata(): Promise<Metadata> {
+  return withMediaOpenGraph(
+    pageMetadata(
+      "Giới thiệu | DEVFOLIO",
+      "Tìm hiểu định hướng chuyên môn, nền tảng kỹ thuật và hành trình phát triển của DEVFOLIO.",
+      "/about",
+    ),
+  );
+}
 const groups = ["Backend", "Frontend", "Database", "DevOps", "Tools"] as const;
 
 export default async function AboutPage() {
@@ -35,6 +41,7 @@ export default async function AboutPage() {
       loadProfile(),
       loadExperiences(),
       loadTechnologies(),
+      loadMediaAssignments(),
     ]);
   } catch {
     return (
@@ -45,7 +52,8 @@ export default async function AboutPage() {
       </main>
     );
   }
-  const [profile, experiences, technologies] = data;
+  const [profile, experiences, technologies, media] = data;
+  const portrait = media.find((item) => item.slot === "about_profile")?.asset;
   if (!profile)
     return (
       <main id="main-content">
@@ -69,12 +77,28 @@ export default async function AboutPage() {
           <Badge>
             {profile.placeholder ? "Hồ sơ mẫu — cần xác nhận" : "Hồ sơ"}
           </Badge>
-          <h1 className="mt-8 max-w-4xl text-[clamp(3rem,7vw,6.5rem)] leading-[1.04] font-semibold tracking-[-.065em]">
-            Về người xây dựng.
-          </h1>
-          <p className="text-muted mt-7 max-w-2xl text-lg leading-8">
-            {profile.bio}
-          </p>
+          <div className="mt-8 grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_16rem]">
+            <div>
+              <h1 className="max-w-4xl text-[clamp(3rem,7vw,6.5rem)] leading-[1.04] font-semibold tracking-[-.065em]">
+                Về người xây dựng.
+              </h1>
+              <p className="text-muted mt-7 max-w-2xl text-lg leading-8">
+                {profile.bio}
+              </p>
+            </div>
+            <div className="border-line bg-subtle relative aspect-[4/5] overflow-hidden rounded-[var(--radius-md)] border">
+              <PortfolioImage
+                src={portrait?.url}
+                alt={portrait?.alt || "Ảnh hồ sơ"}
+                sizes="(max-width: 768px) 100vw, 256px"
+                fallback={
+                  <span className="text-muted absolute inset-0 flex items-center justify-center font-mono text-sm">
+                    Ảnh hồ sơ đang cập nhật
+                  </span>
+                }
+              />
+            </div>
+          </div>
         </SectionWrapper>
         <Divider />
         <SectionWrapper>

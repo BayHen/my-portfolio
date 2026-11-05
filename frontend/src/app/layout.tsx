@@ -3,14 +3,18 @@ import type { ReactNode } from "react";
 import { SiteChrome } from "@/components/layout/site-chrome";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import "@/styles/globals.css";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, withMediaOpenGraph } from "@/lib/seo";
 import { loadSocialLinks } from "@/lib/portfolio-api";
 
-export const metadata: Metadata = pageMetadata(
-  "DEVFOLIO | Python Backend / Full-stack",
-  "Portfolio DEVFOLIO: giới thiệu, dự án và thông tin liên hệ của lập trình viên Python Backend / Full-stack.",
-  "/",
-);
+export async function generateMetadata(): Promise<Metadata> {
+  return withMediaOpenGraph(
+    pageMetadata(
+      "DEVFOLIO | Python Backend / Full-stack",
+      "Portfolio DEVFOLIO: giới thiệu, dự án và thông tin liên hệ của lập trình viên Python Backend / Full-stack.",
+      "/",
+    ),
+  );
+}
 
 export default async function RootLayout({
   children,

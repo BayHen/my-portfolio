@@ -7,14 +7,18 @@ import {
 import { Container, SectionHeading } from "@/components/ui/primitives";
 import { EmptyState, ErrorState } from "@/components/shared/states";
 import { getBackendUrl, loadProjects } from "@/lib/portfolio-api";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, withMediaOpenGraph } from "@/lib/seo";
 import { filterProjects } from "@/lib/project-filters";
 
-export const metadata: Metadata = pageMetadata(
-  "Dự án | DEVFOLIO",
-  "Khám phá danh sách dự án, công nghệ và các case study của DEVFOLIO.",
-  "/projects",
-);
+export async function generateMetadata(): Promise<Metadata> {
+  return withMediaOpenGraph(
+    pageMetadata(
+      "Dự án | DEVFOLIO",
+      "Khám phá danh sách dự án, công nghệ và các case study của DEVFOLIO.",
+      "/projects",
+    ),
+  );
+}
 
 export default async function ProjectsPage({
   searchParams,

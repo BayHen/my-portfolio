@@ -1,5 +1,7 @@
 # DEVFOLIO
 
+Thư viện ảnh tập trung đã có tại `/admin/media`. Xem [quản lý ảnh](docs/media-management.md), [hướng dẫn admin](docs/admin-media.md) và [sửa hydration](docs/hydration-fix.md). Ảnh phát triển được lưu ở `backend/data/media/`, metadata ở PostgreSQL; production dùng S3. Chạy `cd backend` và `.\.venv\Scripts\python.exe -m alembic upgrade head` trước khi dùng chức năng ảnh.
+
 ## Backend và frontend cục bộ
 
 Backend FastAPI đã có tại `backend/`, PostgreSQL có thể chạy bằng `compose.yaml` hoặc cluster cục bộ. Xem [thiết lập backend](docs/backend-setup.md), [database](docs/database.md), [API](docs/api.md) và [kết nối frontend](docs/frontend-backend-integration.md). Cấu hình `BACKEND_API_URL` ở `frontend/.env.local` để Next.js đọc dữ liệu backend; khi để trống, trang dùng nội dung mẫu cục bộ. Dự án và hồ sơ mẫu chưa được nhập vào database như dữ liệu thật.

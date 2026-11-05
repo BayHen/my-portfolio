@@ -1,8 +1,20 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
+import { motion } from "motion/react";
+import { useSyncExternalStore, type ReactNode } from "react";
 import { motionSettings } from "@/lib/motion-settings";
+
+const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(onChange: () => void) {
+  const query = window.matchMedia(reducedMotionQuery);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+function reducedMotionSnapshot() {
+  return window.matchMedia(reducedMotionQuery).matches;
+}
 
 export function Reveal({
   children,
@@ -15,7 +27,11 @@ export function Reveal({
   className?: string;
   hero?: boolean;
 }) {
-  const reduced = !!useReducedMotion();
+  const reduced = useSyncExternalStore(
+    subscribeReducedMotion,
+    reducedMotionSnapshot,
+    () => false,
+  );
   const settings = motionSettings(reduced, delay);
   return (
     <motion.div

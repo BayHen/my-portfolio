@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
+import { PortfolioImage } from "@/components/shared/portfolio-image";
 import {
   Badge,
   Container,
@@ -14,6 +14,7 @@ import { getBackendUrl, loadProject } from "@/lib/portfolio-api";
 import { Reveal } from "@/components/shared/reveal";
 import {
   pageMetadata,
+  withMediaOpenGraph,
   getSiteUrl,
   isIndexable,
   serializeJsonLd,
@@ -41,17 +42,22 @@ export async function generateMetadata({
     );
   }
   return project
-    ? pageMetadata(
-        `${project.title} | DEVFOLIO`,
-        project.summary,
-        `/projects/${project.slug}`,
-        !project.placeholder,
+    ? withMediaOpenGraph(
+        pageMetadata(
+          `${project.title} | DEVFOLIO`,
+          project.summary,
+          `/projects/${project.slug}`,
+          !project.placeholder,
+        ),
+        project.thumbnail,
       )
-    : pageMetadata(
-        "Không tìm thấy dự án | DEVFOLIO",
-        "Dự án không tồn tại.",
-        "/projects",
-        false,
+    : withMediaOpenGraph(
+        pageMetadata(
+          "Không tìm thấy dự án | DEVFOLIO",
+          "Dự án không tồn tại.",
+          "/projects",
+          false,
+        ),
       );
 }
 
@@ -131,19 +137,16 @@ export default async function ProjectDetailPage({
             </p>
           </div>
           <div className="border-line bg-subtle relative mt-12 flex aspect-[16/8] items-end overflow-hidden rounded-[var(--radius-md)] border p-6">
-            {project.thumbnail ? (
-              <Image
-                src={project.thumbnail.src}
-                alt={project.thumbnail.alt}
-                fill
-                sizes="(max-width: 1200px) 100vw, 1200px"
-                className="object-cover"
-              />
-            ) : (
-              <p className="text-muted font-mono text-xs tracking-[.12em] uppercase">
-                Hình ảnh dự án đang cập nhật
-              </p>
-            )}
+            <PortfolioImage
+              src={project.thumbnail?.src}
+              alt={project.thumbnail?.alt || "Ảnh dự án"}
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              fallback={
+                <p className="text-muted font-mono text-xs tracking-[.12em] uppercase">
+                  Hình ảnh dự án đang cập nhật
+                </p>
+              }
+            />
           </div>
           <div className="mt-10 max-w-4xl">
             <DetailSection title="Tổng quan" value={project.description} />
@@ -179,12 +182,15 @@ export default async function ProjectDetailPage({
                       key={image.src}
                       className="border-line relative aspect-video overflow-hidden rounded-lg border"
                     >
-                      <Image
+                      <PortfolioImage
                         src={image.src}
                         alt={image.alt}
-                        fill
                         sizes="(max-width: 640px) 100vw, 50vw"
-                        className="object-cover"
+                        fallback={
+                          <span className="text-muted p-4 text-sm">
+                            Không thể tải ảnh.
+                          </span>
+                        }
                       />
                     </div>
                   ))}

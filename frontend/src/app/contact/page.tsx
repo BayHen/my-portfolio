@@ -8,14 +8,18 @@ import { ContactForm } from "@/components/contact/contact-form";
 import { loadProfile, loadSocialLinks } from "@/lib/portfolio-api";
 import { getBackendUrl } from "@/lib/portfolio-api";
 import { getContactConfig } from "@/lib/contact";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, withMediaOpenGraph } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = pageMetadata(
-  "Liên hệ | DEVFOLIO",
-  "Liên hệ với chủ sở hữu DEVFOLIO qua các kênh công khai hoặc biểu mẫu khi dịch vụ email được cấu hình.",
-  "/contact",
-);
+export async function generateMetadata(): Promise<Metadata> {
+  return withMediaOpenGraph(
+    pageMetadata(
+      "Liên hệ | DEVFOLIO",
+      "Liên hệ với chủ sở hữu DEVFOLIO qua các kênh công khai hoặc biểu mẫu khi dịch vụ email được cấu hình.",
+      "/contact",
+    ),
+  );
+}
 export default async function ContactPage() {
   let profile = null;
   let publicLinks = [] as Awaited<ReturnType<typeof loadSocialLinks>>;

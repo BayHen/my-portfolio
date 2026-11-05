@@ -9,6 +9,7 @@ import { adminRequest } from "@/lib/admin-client";
 const items = [
   { href: "/admin", label: "Tổng quan" },
   { href: "/admin/projects", label: "Dự án" },
+  { href: "/admin/media", label: "Thư viện ảnh" },
   { href: "/admin/technologies", label: "Công nghệ" },
   { href: "/admin/experiences", label: "Kinh nghiệm" },
   { href: "/admin/messages", label: "Lời nhắn" },
